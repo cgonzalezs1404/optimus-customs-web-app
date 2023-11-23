@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingService } from '../../service/loading.service';
-import { CoreModule } from '../../core.module';
+import { LoadingService } from '../../core/service/loading.service';
+import { CoreModule } from '../../core/core.module';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.loadingService.setLoading(true);
-    setTimeout(() => { this.loadingService.setLoading(false); }, 5000);
+    setTimeout(() => { this.loadingService.setLoading(false); }, 1000);
 
   }
 
