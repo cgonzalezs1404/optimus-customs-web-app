@@ -10,7 +10,8 @@ import { CommonModule } from '@angular/common';
         HttpClientModule
     ],
     providers: [
-        service.LoadingService
+        service.LoadingService,
+        service.UsuarioTokenService,
     ],
     exports: []
 }) export class ServiceModule { }

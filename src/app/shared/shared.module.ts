@@ -16,4 +16,4 @@ import { ServiceModule } from './service/service.module';
     ]
 
 })
-export class CoreModule { }
+export class SharedModule { }

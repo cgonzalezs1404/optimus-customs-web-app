@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingService } from '../../core/service/loading.service';
-import { CoreModule } from '../../core/core.module';
+import { LoadingService } from '../../shared/service/loading.service';
 
 @Component({
   selector: 'app-home',

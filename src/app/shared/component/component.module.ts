@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core'
 import { ContentWrapperComponent } from './content-wrapper/content-wrapper.component';
 import { ControlSidebarComponent } from './control-sidebar/control-sidebar.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
-import { HomeComponent } from '../../app/home/home.component';
 import { LoadingComponent } from './loading/loading.component'
-import { LoginComponent } from '../../app/login/login.component';
 import { MainFooterComponent } from './main-footer/main-footer.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
 import { MainSidebarComponent } from './main-sidebar/main-sidebar.component';
@@ -15,10 +12,7 @@ import { RouterModule } from '@angular/router';
     declarations: [
         ContentWrapperComponent,
         ControlSidebarComponent,
-        ForgotPasswordComponent,
-        //HomeComponent,
         LoadingComponent,
-        //LoginComponent,
         MainFooterComponent,
         MainHeaderComponent,
         MainSidebarComponent
@@ -30,10 +24,7 @@ import { RouterModule } from '@angular/router';
     exports:[
         ContentWrapperComponent,
         ControlSidebarComponent,
-        ForgotPasswordComponent,
-        //HomeComponent,
         LoadingComponent,
-        //LoginComponent,
         MainFooterComponent,
         MainHeaderComponent,
         MainSidebarComponent
