@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
     providers: [
         service.LoadingService,
         service.UsuarioTokenService,
+        service.ForageStorageService
     ],
     exports: []
 }) export class ServiceModule { }

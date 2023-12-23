@@ -22,7 +22,16 @@ export const environment = {
             usuario: '/api/Usuario',
             usuario_token_login: '/api/UsuarioToken/login',
             usuario_token_refresh: '/api/UsuarioToken/refresh',
+            usuario_token_session: 'api/UsuarioToken/session',
             usuario_x_privilegio: '/api/UsuarioXPrivilegio'
+        },
+        login:{
+            name:'login',
+            route: '/login'
+        },
+        home:{
+            name:'home',
+            route: '/home'
         }
     }
 };

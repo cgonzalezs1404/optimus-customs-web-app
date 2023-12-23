@@ -1,28 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app.routing.module';
 import { AppComponent } from './app.component';
-import { HomeModule } from './pages/home/home.module';
-import { OperacionModule } from './pages/operacion/operacion.module';
-import { FacturaModule } from './pages/factura/factura.module';
-
+import { PageComponent } from './page/page.component';
+import { SharedModule } from "./shared/shared.module";
+import { APP_ROUTES } from './app.routing';
 
 @NgModule({
   declarations: [
     AppComponent,
-
-  ],
-  imports: [
-    BrowserModule,
-    HomeModule,
-    OperacionModule,
-    FacturaModule,
-    AppRoutingModule,
+    PageComponent
   ],
   providers: [
     provideClientHydration()
   ],
-  bootstrap: [AppComponent]
+  imports: [
+    APP_ROUTES,
+    BrowserModule,
+
+    SharedModule
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -12,6 +12,11 @@ export class UsuarioTokenService {
 
   constructor(private httpClient: HttpClient) { }
 
+  public async session(filters: any): Promise<any> {
+    const url = `${this._env.app.route.usuario_token_session}${filters}`;
+    return await lastValueFrom(this.httpClient.get(url, { observe: 'response' }).pipe(map((resp: any) => { return resp; })));
+  }
+
   public async login(payload: any): Promise<any> {
     const url = `${this._env.app.api}${this._env.app.route.usuario_token_login}`;
     return await lastValueFrom(this.httpClient.post(url, payload, { observe: 'response' }).pipe(map((resp: any) => { return resp; })));
