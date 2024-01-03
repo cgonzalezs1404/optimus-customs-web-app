@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioTokenService } from '../../service/usuario-token.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LoadingService } from '../../service/loading.service';
 import { Router } from '@angular/router';
+import { SessionService } from '../../service/session.service';
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-login',
@@ -13,9 +15,10 @@ export class LoginComponent implements OnInit {
 
   public loginForm: FormGroup | any;
   public loginFomSubmited: boolean = false;
+  public _env = environment;
 
   constructor(
-    private loadingService: LoadingService,
+    private sessionService: SessionService,
     private usuarioTokenService: UsuarioTokenService,
     private router: Router,
     private fb: FormBuilder) {
@@ -26,6 +29,13 @@ export class LoginComponent implements OnInit {
       email: [null, Validators.required],
       password: [null, Validators.required]
     });
+
+    var session = await this.sessionService.getStorageData();
+    if (session) {
+      this.router.navigate([this._env.app.home.route]);
+    } else {
+      this.router.navigate([this._env.app.login.route]);
+    }
   }
 
   public async login() {
@@ -36,13 +46,16 @@ export class LoginComponent implements OnInit {
 
     let payload: any = {
       username: this.loginForm.get('email').value,
-      hashpassword: this.loginForm.get('password').value
+      password: this.loginForm.get('password').value
     };
 
     var result = await this.usuarioTokenService.login(payload).then((response) => response).catch((error) => error);
     if (result.status === 200) {
-      setTimeout(() => this.router.navigateByUrl('/home'), 1000);
+      console.log(result.body);
+      this.sessionService.setStorageData(result.body);
+      this.router.navigateByUrl('/home')
     }
+    
 
   }
 

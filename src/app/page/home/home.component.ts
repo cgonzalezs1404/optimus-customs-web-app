@@ -13,8 +13,6 @@ export class HomeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.loadingService.setLoading(true);
-    setTimeout(() => { this.loadingService.setLoading(false); }, 1000);
-
   }
 
 
