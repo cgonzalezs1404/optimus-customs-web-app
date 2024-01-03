@@ -1,7 +1,17 @@
 
-<app-main-header></app-main-header>
-<app-main-sidebar></app-main-sidebar>
-<app-control-sidebar></app-control-sidebar>
+<div class="wrapper">
+    <app-main-header></app-main-header>
+    <app-control-sidebar></app-control-sidebar>
+    <app-main-sidebar></app-main-sidebar>
+    
+    <div class="content-wrapper animated fadeIn fast">
+        <router-outlet></router-outlet>
+    </div>
+    <app-main-footer></app-main-footer>
+</div>
+<!-- 
+
+
 
 <router-outlet></router-outlet>
-<app-main-footer></app-main-footer>
+ -->
