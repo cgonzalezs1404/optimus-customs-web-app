@@ -1,4 +1,5 @@
 import { NgModule } from "@angular/core";
+import { NgSelectModule } from "@ng-select/ng-select";
 import { CommonModule } from "@angular/common";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
@@ -7,6 +8,7 @@ import { SharedModule } from "../shared/shared.module";
 import { HomeComponent } from "./home/home.component";
 import { FacturaComponent } from "./factura/factura.component";
 import { OperacionComponent } from "./operacion/operacion.component";
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
 
@@ -18,9 +20,11 @@ import { OperacionComponent } from "./operacion/operacion.component";
     imports: [
         CommonModule,
         ReactiveFormsModule,
+        NgSelectModule,
         FormsModule,
         RouterModule,
         SharedModule,
+        ModalModule.forRoot(),
         PAGES_ROUTES
     ]
 })

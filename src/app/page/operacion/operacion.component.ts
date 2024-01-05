@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { LoadingService } from '../../shared/service/loading.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-operacion',
@@ -8,11 +9,24 @@ import { LoadingService } from '../../shared/service/loading.service';
 })
 export class OperacionComponent implements OnInit {
 
-  constructor(private loadingService: LoadingService) {
+  //@ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
+  public _modalRef?: BsModalRef;
+
+  public people: any[] = [
+    { id: 1, name: 'papa' }
+  ]
+
+  constructor(
+    private loadingService: LoadingService,
+    private modalService: BsModalService,
+  ) {
 
   }
   ngOnInit(): void {
-    this.loadingService.setLoading(true);
-    setTimeout(() => { this.loadingService.setLoading(false); }, 500);
+
+  }
+
+  public modalShow(template: TemplateRef<void>): void {
+    this._modalRef = this.modalService.show(template);
   }
 }
