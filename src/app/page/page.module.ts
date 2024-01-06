@@ -9,6 +9,7 @@ import { HomeComponent } from "./home/home.component";
 import { FacturaComponent } from "./factura/factura.component";
 import { OperacionComponent } from "./operacion/operacion.component";
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ServiceModule } from "../service/service.module";
 
 @NgModule({
 
@@ -24,6 +25,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
         FormsModule,
         RouterModule,
         SharedModule,
+        ServiceModule,
         ModalModule.forRoot(),
         PAGES_ROUTES
     ]

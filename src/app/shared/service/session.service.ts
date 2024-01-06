@@ -11,13 +11,11 @@ export class SessionService {
 
     public async getStorageData(): Promise<any> {
         var session: any = await localStorage.getItem(this._env.storage);
-        
-        return session;
+        return JSON.parse(session);
     }
 
     public async setStorageData(session: any): Promise<boolean> {
-        localStorage.setItem(this._env.storage, session);
-        console.log(session);
+        localStorage.setItem(this._env.storage, JSON.stringify(session));
         return true;
     }
 

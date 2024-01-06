@@ -19,26 +19,21 @@ export class HeaderInterceptor implements HttpInterceptor {
         const strContains = req.url.startsWith(this._env.app.api);
         const includeAuthUrl = req.url.includes(this._env.app.route.usuario_token_login);
         if (strContains && !includeAuthUrl) {
+            
             return from(this.getUser()).pipe(switchMap(user => {
                 const headers = req.headers
-                    .set('Accept', 'application/json')
-                    .set('Authorization', `Bearer ${user.token}`)
-                    .set('Accept-Application', '')
-                    .set('Accept-Data', '');
+                    .append('Accept', 'application/json')
+                    .append('Authorization', `Bearer ${user.token}`);
 
-                const httpRequestClone = req.clone({
-                    headers
-                });
+                const httpRequestClone = req.clone({ headers });
                 return next.handle(httpRequestClone);
             }));
         } else {
             return next.handle(req);
         }
-
-
     }
 
-    private async getUser() {
+    private async getUser(): Promise<any> {
         return await this.sessionService.getStorageData();
     }
 }
