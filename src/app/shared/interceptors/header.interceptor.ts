@@ -23,6 +23,7 @@ export class HeaderInterceptor implements HttpInterceptor {
             return from(this.getUser()).pipe(switchMap(user => {
                 const headers = req.headers
                     .append('Accept', 'application/json')
+                    .append('Content-Type', 'application/json')
                     .append('Authorization', `Bearer ${user.token}`);
 
                 const httpRequestClone = req.clone({ headers });

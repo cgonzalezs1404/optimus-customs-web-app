@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { PageComponent } from './page/page.component';
 import { SharedModule } from "./shared/shared.module";
 import { APP_ROUTES } from './app.routing';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { APP_ROUTES } from './app.routing';
   imports: [
     APP_ROUTES,
     BrowserModule,
-
+    BrowserAnimationsModule,
+    NgxSpinnerModule,
     SharedModule
   ],
   bootstrap: [AppComponent],

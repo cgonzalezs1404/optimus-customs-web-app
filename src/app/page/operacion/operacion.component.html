@@ -176,32 +176,37 @@
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
   </div>
-  <form>
+  <form [formGroup]="_form" (ngSubmit)="submitForm()">
     <div class="modal-body">
 
       <div class="form-group row">
         <div class="col-sm-4">
           <label class="">Giro</label>
-          <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value" [clearable]="true" />
+          <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_giro" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_giro.errors }"/>
+          <div *ngIf="_form.controls.id_giro.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
         <div class="col-sm-4">
           <label class="">Estado</label>
-          <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value" [clearable]="true" />
+          <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_estado" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }"/>
+            <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
         <div class="col-sm-4">
           <label class="">Consumidor</label>
-          <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value" [clearable]="true" />
+          <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_consumidor" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_consumidor.errors }"/>
+            <div *ngIf="_form.controls.id_consumidor.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
       </div>
-
-
-
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Aceptar</button>
+      <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()">Cancelar</button>
     </div>
   </form>
-  <div class="modal-footer">
-    <button class="btn btn-default" (click)="_modalRef?.hide()">Cerrar</button>
-  </div>
+
 </ng-template>

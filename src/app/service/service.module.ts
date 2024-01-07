@@ -15,6 +15,7 @@ import * as service from './service.index';
     service.GiroService,
     service.EstadoService,
     service.ConsumidorService,
+    service.OperacionService,
   ]
 })
 export class ServiceModule { }

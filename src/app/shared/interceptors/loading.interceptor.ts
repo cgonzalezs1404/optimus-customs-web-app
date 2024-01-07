@@ -2,23 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse } from '@angular/common/http';
 import { Observable, catchError, map } from 'rxjs';
 import { LoadingService } from '../service/loading.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
 
-  constructor(private loadingService: LoadingService) { }
+  constructor(private loadingService: NgxSpinnerService) { }
 
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.loadingService.setLoading(true);
+    this.loadingService.show();
 
     return next.handle(request)
       .pipe(catchError((err) => {
-        this.loadingService.setLoading(false);
+        this.loadingService.hide();
         return err;
       }))
       .pipe(map<any, any>((evt: HttpEvent<any>) => {
         if (evt instanceof HttpResponse) {
-          setTimeout(() => { this.loadingService.setLoading(false); }, 2000);
+          setTimeout(() => { this.loadingService.hide(); }, 2000);
         }
         return evt;
       }));
