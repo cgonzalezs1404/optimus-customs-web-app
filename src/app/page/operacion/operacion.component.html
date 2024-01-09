@@ -26,38 +26,35 @@
           </div>
           <!-- /.card-header -->
           <!-- form start -->
-          <form>
+          <form [formGroup]="_searchForm" (ngSubmit)="searchData()">
             <div class="card-body">
 
               <div class="row">
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Giro</label>
-                    <!-- <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email"> -->
-                    <ng-select placeholder="Select..." [multiple]="true">
-                      <ng-option>Baxin</ng-option>
-                      <ng-option>Se</ng-option>
-                      <ng-option>La</ng-option>
-                      <ng-option>Come</ng-option>
-                    </ng-select>
+                    <label for="exampleInputPassword1">Código</label>
+                    <input type="text" class="form-control" formControlName="codigo" placeholder="Ingrese">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Giro</label>
+                    <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value"
+                      [clearable]="true" formControlName="id_giro" />
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Estado</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+                      [clearable]="true" formControlName="id_estado" />
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Consumidor</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                  </div>
-                </div>
-                <div class="col-sm-3">
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Código</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
+                      [clearable]="true" formControlName="id_consumidor" />
                   </div>
                 </div>
               </div>
@@ -66,22 +63,26 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Fecha Inicio</label>
-                    <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <input type="date" class="form-control" formControlName="fecha_inicio">
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Fecha Fin</label>
-                    <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <input type="date" class="form-control" formControlName="fecha_fin">
                   </div>
                 </div>
+
+                <div class="form-check" style="align-self: center;">
+                  <div class="col-sm-3">
+                    <input class="form-check-input" type="checkbox" formControlName="descending">
+                    <label for="inlineCheckbox1">Descendiente</label>
+                  </div>
+
+                </div>
+
               </div>
 
-
-              <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-              </div>
             </div>
             <!-- /.card-body -->
 
@@ -110,17 +111,36 @@
             <div class="table-responsive">
               <table class="table table-bordered table-hover">
                 <thead style="background-color: #eee!important">
-                  <tr>
-                    <th>Código</th>
-                    <th>Giro</th>
-                    <th>Estado</th>
-                    <th>Consumidor</th>
-                    <th>Fecha Inicio</th>
-                    <th>Fecha Fin</th>
+                  <tr #tableHeaderHead>
+                    <th class="inline-text">Código</th>
+                    <th class="inline-text">Giro</th>
+                    <th class="inline-text">Estado</th>
+                    <th class="inline-text">Consumidor</th>
+                    <th class="inline-text">Fecha Inicio</th>
+                    <th class="inline-text">Fecha Fin</th>
+                    <th class="inline-text">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <ng-template [ngIf]="_dtData.data.length === 0" [ngIfElse]="tableBody">
+                    <td [attr.colspan]="_dataObjectLength" class="text-center">
+                      <span>Sin Datos</span>
+                    </td>
+                  </ng-template>
 
+                  <ng-template #tableBody>
+                    <tr *ngFor="let item of _dtData.data">
+                      <td>{{item.codigo}}</td>
+                      <td>{{item.id_giro}}</td>
+                      <td>{{item.id_estado}}</td>
+                      <td>{{item.id_consumidor}}</td>
+                      <td>{{item.fecha_inicio}}</td>
+                      <td>{{item.fecha_fin}}</td>
+                      <td>
+                        <button class="btn btn-primary">Editar</button>
+                      </td>
+                    </tr>
+                  </ng-template>
                 </tbody>
               </table>
             </div>
@@ -182,23 +202,25 @@
       <div class="form-group row">
         <div class="col-sm-4">
           <label class="">Giro</label>
-          <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value"
-            [clearable]="true" formControlName="id_giro" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_giro.errors }"/>
+          <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value" [clearable]="true"
+            formControlName="id_giro" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_giro.errors }" />
           <div *ngIf="_form.controls.id_giro.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
         <div class="col-sm-4">
           <label class="">Estado</label>
           <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
-            [clearable]="true" formControlName="id_estado" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }"/>
-            <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
+            [clearable]="true" formControlName="id_estado"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }" />
+          <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
         <div class="col-sm-4">
           <label class="">Consumidor</label>
           <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
-            [clearable]="true" formControlName="id_consumidor" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_consumidor.errors }"/>
-            <div *ngIf="_form.controls.id_consumidor.errors" class="invalid-feedback">Campo vacio</div>
+            [clearable]="true" formControlName="id_consumidor"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_consumidor.errors }" />
+          <div *ngIf="_form.controls.id_consumidor.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
       </div>
