@@ -5,7 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../../shared/service/session.service';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MetaData } from '../../shared/interface/metadata';
+import { MetaData, metaDataLength, newMetaData } from '../../shared/interface/metadata';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class OperacionComponent implements OnInit {
   @ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
   @ViewChild('tableHeaderHead') _tableHeaderHead: ElementRef<HTMLInputElement> | any;
   public _modalRef?: BsModalRef;
-  public _dtData: MetaData = { data: [], meta: { totalCount: 0, pageSize: 0, currentPage: 0, totalPages: 0, hasNextPage: false, hasPreviousPage: false, nextPageUrl: '', previousPageUrl: '' } };
+  public _dtData: MetaData = newMetaData;
+  public _dataPageLength: number[] = metaDataLength;
   public _dataObjectLength = 0;
 
   public giroSelect: any[] = [];
@@ -49,7 +51,7 @@ export class OperacionComponent implements OnInit {
     private sessionService: SessionService,
     private builder: FormBuilder,
   ) {
-    
+
   }
 
   public async ngOnInit(): Promise<void> {
@@ -57,7 +59,7 @@ export class OperacionComponent implements OnInit {
     this.initForms();
     this.session = await this.sessionService.getStorageData();
     await this.createList();
-    
+
     this.loadingService.hide();
   }
 
@@ -120,17 +122,18 @@ export class OperacionComponent implements OnInit {
   }
 
   public async searchData() {
-    let urlFilters: string = `?page_number=1&page_size=100`
-    for(var key in this._searchForm.value){
-      console.log(`Key->${key} Value->${this._searchForm.value[key]}`);
-      urlFilters+= this._searchForm.value[key] ? `&${key}=${this._searchForm.value[key]}` : '';
+    let urlFilters: string = '';
+    urlFilters += `?page_number=${(this._dtData.metadata.currentPage !== 0) ? this._dtData.metadata.currentPage : 1}`
+    urlFilters += `&page_size=${(this._dtData.metadata.pageSize !== 0) ? this._dtData.metadata.pageSize : 10}`
+    for (var key in this._searchForm.value) {
+      urlFilters += this._searchForm.value[key] ? `&${key}=${this._searchForm.value[key]}` : '';
     }
-    console.log(urlFilters);
     var result = await this.operacionService.getData(urlFilters);
-    if(result.status === 200){
+    if (result.status === 200) {
       this._dtData = result.body;
     }
-    console.log(result);
+    console.log(urlFilters);
+    console.log(this._dtData);
 
   }
 
@@ -169,5 +172,16 @@ export class OperacionComponent implements OnInit {
 
   public modalShow(template: TemplateRef<void>): void {
     this._modalRef = this.modalService.show(template, this.modalConfig);
+  }
+
+  /* Data table */
+  public async onChangeDataLength(event: any): Promise<void> {
+    if (this._dtData.metadata) this._dtData.metadata.pageSize = event;
+    await this.searchData();
+  }
+
+  public async pageChanged(event: PageChangedEvent): Promise<void> {
+    if (this._dtData.metadata) this._dtData.metadata.currentPage = event.page;
+    await await this.searchData();
   }
 }

@@ -122,7 +122,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-template [ngIf]="_dtData.data.length === 0" [ngIfElse]="tableBody">
+                  <ng-template [ngIf]="(_dtData.data.length === 0)" [ngIfElse]="tableBody">
                     <td [attr.colspan]="_dataObjectLength" class="text-center">
                       <span>Sin Datos</span>
                     </td>
@@ -134,8 +134,8 @@
                       <td>{{item.id_giro}}</td>
                       <td>{{item.id_estado}}</td>
                       <td>{{item.id_consumidor}}</td>
-                      <td>{{item.fecha_inicio}}</td>
-                      <td>{{item.fecha_fin}}</td>
+                      <td>{{item.fecha_inicio | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{item.fecha_fin | date: 'dd/MM/yyyy'}}</td>
                       <td>
                         <button class="btn btn-primary">Editar</button>
                       </td>
@@ -158,21 +158,16 @@
 
               <div class="row">
                 <div class="col-sm-4">
-                  <select class="custom-select">
-                    <option>10</option>
-                    <option>25</option>
-                    <option>50</option>
-                    <option>100</option>
+                  <select class="custom-select" [ngModel]="_dtData.metadata.pageSize"
+                    (ngModelChange)="onChangeDataLength($event)">
+                    <option *ngFor="let item of _dataPageLength">{{item}}</option>
                   </select>
                 </div>
                 <div class="col-sm-8">
-                  <ul class="pagination m-0">
-                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                  </ul>
+                  <pagination [boundaryLinks]="true" [itemsPerPage]="_dtData.metadata.pageSize"
+                    [totalItems]="_dtData.metadata.totalCount" [(ngModel)]="_dtData.metadata.currentPage" [maxSize]="5"
+                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                    (pageChanged)="pageChanged($event)"></pagination>
                 </div>
 
               </div>
