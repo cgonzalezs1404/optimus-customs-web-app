@@ -5,9 +5,7 @@ import { InterceptorModule } from './interceptors/interceptor.module';
 import { PageModule } from './page/page.module';
 
 @NgModule({
-    declarations: [
-
-    ],
+    declarations: [],
     imports: [
         ComponentModule,
         ServiceModule,

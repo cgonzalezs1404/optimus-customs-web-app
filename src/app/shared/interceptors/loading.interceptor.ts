@@ -19,7 +19,7 @@ export class LoadingInterceptor implements HttpInterceptor {
       }))
       .pipe(map<any, any>((evt: HttpEvent<any>) => {
         if (evt instanceof HttpResponse) {
-          setTimeout(() => { this.loadingService.hide(); }, 2000);
+          this.loadingService.hide();
         }
         return evt;
       }));

@@ -1,13 +1,12 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import * as localService from '../../service/service.index';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../../shared/service/session.service';
 import Swal from 'sweetalert2';
+import * as service from '../../shared/service/service.index';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MetaData, metaDataLength, newMetaData } from '../../shared/interface/metadata';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-
 
 @Component({
   selector: 'app-operacion',
@@ -38,16 +37,17 @@ export class OperacionComponent implements OnInit {
   public _form: FormGroup | any;
   public _searchForm: FormGroup | any;
   public formSubmitted: boolean = false;
+  public isUpdate: boolean = false;
   public session: any;
 
 
   constructor(
     private modalService: BsModalService,
     private loadingService: NgxSpinnerService,
-    private giroService: localService.GiroService,
-    private estadoService: localService.EstadoService,
-    private consumidorService: localService.ConsumidorService,
-    private operacionService: localService.OperacionService,
+    private giroService: service.GiroService,
+    private estadoService: service.EstadoService,
+    private consumidorService: service.ConsumidorService,
+    private operacionService: service.OperacionService,
     private sessionService: SessionService,
     private builder: FormBuilder,
   ) {
@@ -91,10 +91,10 @@ export class OperacionComponent implements OnInit {
     this.giroSelect = [...this.giroSelect];
     this.estadoSelect = [...this.estadoSelect];
     this.consumidorSelect = [...this.consumidorSelect];
+    console.log(this.giroSelect);
   }
 
   private initForms() {
-    console.log('hola');
     this._searchForm = this.builder.group({
       id_giro: [null],
       id_estado: [null],
@@ -102,6 +102,7 @@ export class OperacionComponent implements OnInit {
       codigo: [null],
       fecha_inicio: [null],
       fecha_fin: [null],
+      activo: [true],
       descending: [null]
     });
 
@@ -132,13 +133,10 @@ export class OperacionComponent implements OnInit {
     if (result.status === 200) {
       this._dtData = result.body;
     }
-    console.log(urlFilters);
-    console.log(this._dtData);
-
   }
 
-  public async submitForm() {
-    this.formSubmitted = true;
+  public async initCreateForm() {
+    this.isUpdate = false;
     this._form.patchValue({
       id: 0,
       codigo: null,
@@ -150,23 +148,56 @@ export class OperacionComponent implements OnInit {
       fecha_actualizacion: new Date(),
       activo: true
     });
+    this.modalShow(this._modalView);
+  }
+
+  public async initEditForm(item: any) {
+    this.isUpdate = true;
+    this._form.reset();
+    this._form.patchValue(item);
+    this.modalShow(this._modalView);
+  }
+
+  public async initDeleteForm(item: any) {
+    Swal.fire({
+      title: "¿Estas seguro?",
+      text: 'Esto no podrá revertirse',
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "!Sí, borralo!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        let result = await this.operacionService.deleteData(item.id);
+        if (result.status === 200) {
+          const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.addEventListener('mouseenter', Swal.stopTimer); toast.addEventListener('mouseleave', Swal.resumeTimer); } });
+          Toast.fire({ icon: 'success', title: 'Borrado Correcto' });
+          await this.searchData();
+        }
+      }
+    });
+  }
+
+  public async submitForm() {
+    this.formSubmitted = true;
+
     if (this._form.invalid) {
       return;
     }
 
-    var result = await this.operacionService.postData(JSON.stringify(this._form.value));
+    let result: any;
+    if (this.isUpdate) { result = await this.operacionService.putData(this._form.value.id, JSON.stringify(this._form.value)); }
+    else { result = await this.operacionService.postData(JSON.stringify(this._form.value)); }
+
     if (result.status !== 200) {
       return;
     }
 
     this._modalRef?.hide();
-    Swal.fire({
-      title: "Resultado",
-      text: "Registro creado",
-      icon: "success",
-      timer: 3000,
-      timerProgressBar: true,
-    });
+    const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.addEventListener('mouseenter', Swal.stopTimer); toast.addEventListener('mouseleave', Swal.resumeTimer); } });
+    Toast.fire({ icon: 'success', title: this.isUpdate ? 'Actualizacion Correcto' : 'Creación Correcto' });
     await this.searchData();
   }
 
@@ -183,5 +214,15 @@ export class OperacionComponent implements OnInit {
   public async pageChanged(event: PageChangedEvent): Promise<void> {
     if (this._dtData.metadata) this._dtData.metadata.currentPage = event.page;
     await await this.searchData();
+  }
+
+  public catalogValue(name: string, value: any) {
+    if (name == 'giro')
+      return this.giroSelect.find(t => t.value === value).text;
+    if (name == 'estado')
+      return this.estadoSelect.find(t => t.value === value).text;
+    if (name == 'consumidor')
+      return this.consumidorSelect.find(t => t.value === value).text;
+    return '...';
   }
 }

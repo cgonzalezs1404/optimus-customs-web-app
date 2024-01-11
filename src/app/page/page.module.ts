@@ -10,14 +10,14 @@ import { FacturaComponent } from "./factura/factura.component";
 import { OperacionComponent } from "./operacion/operacion.component";
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule} from 'ngx-bootstrap/pagination';
-import { ServiceModule } from "../service/service.module";
 
 @NgModule({
 
     declarations: [
         HomeComponent,
         FacturaComponent,
-        OperacionComponent
+        OperacionComponent,
+        
     ],
     imports: [
         CommonModule,
@@ -26,7 +26,6 @@ import { ServiceModule } from "../service/service.module";
         FormsModule,
         RouterModule,
         SharedModule,
-        ServiceModule,
         ModalModule.forRoot(),
         PaginationModule.forRoot(),
         PAGES_ROUTES
