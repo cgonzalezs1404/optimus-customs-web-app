@@ -1,21 +1,192 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">Facturas</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Factura</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
 
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">BACTRIM</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Búsqueda</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form [formGroup]="_searchForm" (ngSubmit)="searchData()">
+            <div class="card-body">
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label for="exampleInputPassword1">Operación</label>
+                  <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+                    [clearable]="true" formControlName="id_estado" />
+                </div>
+                <div class="col-sm-3">
+                  <label for="exampleInputPassword1">Estado</label>
+                  <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+                    [clearable]="true" formControlName="id_estado" />
+                </div>
+                <div class="col-sm-3">
+                  <label>Tipo</label>
+                  <input type="text" class="form-control" formControlName="tipo" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Razón Social</label>
+                  <input type="text" class="form-control" formControlName="razon_social" placeholder="Ingrese">
+                </div>
+                
+              </div>
+
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label>RFC</label>
+                  <input type="text" class="form-control" formControlName="rfc" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Serie</label>
+                  <input type="text" class="form-control" formControlName="serie" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Folio</label>
+                  <input type="text" class="form-control" formControlName="folio" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Total</label>
+                  <input type="text" class="form-control" formControlName="total" placeholder="Ingrese">
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label>Fecha Emisión</label>
+                  <input  class="form-control" type="text" mwlFlatpickr formControlName="fecha_emision"
+                  [placeholder]="'Selecciona fecha'" [dateFormat]="'d-m-Y'" [enableTime]="false" style="background: none;">
+                </div>
+                <div class="col-sm-3">
+                  <label>Fecha Pago</label>
+                  <input  class="form-control" type="text" mwlFlatpickr formControlName="fecha_cierre"
+                  [placeholder]="'Selecciona fecha'" [dateFormat]="'d-m-Y'" [enableTime]="false" style="background: none;">
+                </div>
+                <div class="col-sm-3 text-center">
+                  <label class="control-label" style="color: transparent;">-</label>
+                  <div class="form-check">
+                    <div class="icheck-primary">
+                      <input type="checkbox" id="checkboxPrimary1" formControlName="descendente">
+                      <label for="checkboxPrimary1">Descendiente</label>
+                    </div>  
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer clearfix">
+              <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span>Buscar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
     </div>
-    <!-- /.content-header -->
+  </div>
+</section>
 
-    <!-- Main content -->
-    <!-- /.content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+
+          <div class="card-header">
+            <div class="row justify-content-between align-items-center">
+              <div class="col-sm-1">
+                <h3 class="card-title">Información</h3>
+              </div>
+              <div class="text-end">
+                <button class="btn btn-warning btn-sm" (click)="initCreateForm()">
+                  <span class="fa fa-plus"></span>Agregar</button>
+              </div>
+
+
+            </div>
+
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead style="background-color: #eee!important">
+                  <tr #tableHeaderHead>
+                    <th class="text-center">Operación</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Razón Social</th>
+                    <th class="text-center">Fecha Inicio</th>
+                    <th class="text-center">Fecha Fin</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <ng-template [ngIf]="(_dtData.data.length === 0)" [ngIfElse]="tableBody">
+                    <td [attr.colspan]="_dataObjectLength" class="text-center">
+                      <span>Sin Datos</span>
+                    </td>
+                  </ng-template> -->
+
+                  <!-- <ng-template #tableBody>
+                    <tr *ngFor="let item of _dtData.data">
+                      <td>{{item.codigo}}</td>
+                      <td>{{catalogValue('giro',item.id_giro)}}</td>
+                      <td>{{catalogValue('estado',item.id_estado)}}</td>
+                      <td>{{catalogValue('consumidor',item.id_consumidor)}}</td>
+                      <td>{{item.fecha_inicio | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{item.fecha_fin | date: 'dd/MM/yyyy'}}</td>
+                      <td class="text-center">
+                        <button class="btn btn-primary mr-2 btn-sm" (click)="initEditForm(item)"><span
+                            class="fa fa-edit"></span> Editar</button>
+                        <button class="btn btn-danger btn-sm" (click)="initDeleteForm(item)"><span
+                            class="fa fa-times"></span> Eliminar</button>
+                      </td>
+                    </tr>
+                  </ng-template> -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!-- <div class="card-footer clearfix" *ngIf="_dtData.metadata && _dtData.metadata.totalCount > 0">
+            <div class="row">
+              <div class="col-md-auto">
+                <select class="custom-select" [ngModel]="_dtData.metadata.pageSize"
+                  (ngModelChange)="onChangeDataLength($event)">
+                  <option *ngFor="let item of _dataPageLength">{{item}}</option>
+                </select>
+              </div>
+              <div class="col-md-auto">
+                <pagination [boundaryLinks]="true" [itemsPerPage]="_dtData.metadata.pageSize"
+                  [totalItems]="_dtData.metadata.totalCount" [(ngModel)]="_dtData.metadata.currentPage" [maxSize]="5"
+                  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                  (pageChanged)="pageChanged($event)"></pagination>
+              </div>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

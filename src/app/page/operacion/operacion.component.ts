@@ -103,7 +103,7 @@ export class OperacionComponent implements OnInit {
       fecha_inicio: [null],
       fecha_fin: [null],
       activo: [true],
-      descending: [null]
+      descendente: [true]
     });
 
     this._form = this.builder.group({

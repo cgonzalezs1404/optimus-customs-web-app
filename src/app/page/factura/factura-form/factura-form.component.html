@@ -1,0 +1,214 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Facturas</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Factura</li>
+                    <li class="breadcrumb-item active">Form</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="content animated fadeIn fast">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <form [formGroup]="_form">
+                            <div class="card-body">
+                                <div class="row form-group">
+                                    <div class="col-sm-3">
+                                        <label>Operacion</label>
+                                        <ng-select></ng-select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <label style="color: transparent;">-</label>
+                                        <button class="form-control btn btn-primary" (click)="addFactura()">
+                                            <i class="fa fa-plus mr-2"></i>Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                                <ng-container formArrayName="facturas">
+                                    <ng-container *ngFor="let factura of facturas.controls; let i = index">
+                                        <div class="row form-group">
+                                            <div class="col-sm-12">
+                                                <div class="border rounded p-4 bg-light">
+                                                    <div class="row justify-content-between align-items-center">
+                                                        <div class="col-sm-9">
+                                                            <h4>Nueva Factura</h4>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <button class="btn btn-danger" (click)="deleteFactura(i)">
+                                                                <i class="fa fa-minus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row form-group mb-5 justify-content-center">
+                                                        <div class="col-sm-3">
+
+                                                            <div class="row form-group">
+                                                                <div class="col-sm-6">
+                                                                    <label style="color: transparent;">-</label>
+                                                                    <input type="file" multiple="false" accept=".xml"
+                                                                        id="import-file-xml" hidden #importFileXmlInput
+                                                                        (change)="importFile($event, i)">
+                                                                    <button type="button"
+                                                                        class="btn btn-warning btn-block"
+                                                                        (click)="importFileXmlInput.click()">
+                                                                        <i class="fa fa-file mr-2"></i>Cargar XML
+                                                                    </button>
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <label style="color: transparent;">-</label>
+                                                                    <input type="file" multiple="false" accept=".pdf"
+                                                                        id="import-file-pdf" hidden #importFilePdfInput
+                                                                        (change)="importFile($event, i)">
+                                                                    <button type="button"
+                                                                        class="btn btn-warning btn-block"
+                                                                        (click)="importFilePdfInput.click()">
+                                                                        <i class="fa fa-file mr-2"></i>Cargar PDF
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label>Archivos Adjuntos</label>
+                                                            <ul class="list-group">
+                                                                <li class="list-group-item text-center">
+                                                                    <h3>Sin datos</h3>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row form-group">
+                                                        <button class="btn btn-success"><i class="fa fa-check-square-o mr-2"></i> Validar</button>
+                                                    </div>
+                                                    <form [formGroup]="factura">
+                                                        <div class="row form-group">
+                                                            <div class="col-sm-3">
+                                                                <label>Estado</label>
+                                                                <ng-select></ng-select>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <label>Tipo</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="tipo"/>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <label>Serie</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="serie"/>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <label>Folio</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="folio"/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-sm-3">
+                                                                <label>RFC</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="rfc"/>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <label>Razón Social</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="razon_social"/>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <label>Precio</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="precio"/>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <label>Fecha de emisión</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="fecha_emision"/>
+                                                            </div>
+                                                            
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            <div class="col-sm-3">
+                                                                <label>Fecha de cierre</label>
+                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="fecha_cierre"/>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </ng-container>
+                                </ng-container>
+
+
+                                <!-- <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <div class="border rounded p-4 bg-light">
+                                            <div class="row justify-content-between align-items-center">
+                                                <div class="col-sm-9">
+                                                    <h4>Cargar Factura</h4>
+                                                </div>
+                                                <div class="text-end">
+                                                    <button class="btn btn-primary mr-2"><i
+                                                            class="fa fa-plus"></i></button>
+                                                    <button class="btn btn-danger"><i class="fa fa-minus"></i></button>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group mb-5 justify-content-center">
+                                                <div class="col-sm-3">
+
+                                                    <div class="row form-group">
+                                                        <div class="col-sm-6">
+                                                            <label style="color: transparent;">-</label>
+                                                            <input type="file" multiple="true" accept=".xml"
+                                                                id="import-file-xml" hidden #importFileXmlInput>
+                                                            <button type="button" class="btn btn-warning btn-block"
+                                                                (click)="importFileXmlInput.click()">
+                                                                <i class="fa fa-file mr-2"></i>Cargar XML
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label style="color: transparent;">-</label>
+                                                            <input type="file" multiple="true" accept=".pdf"
+                                                                id="import-file-xml" hidden #importFilePdfInput>
+                                                            <button type="button" class="btn btn-warning btn-block"
+                                                                (click)="importFilePdfInput.click()">
+                                                                <i class="fa fa-file mr-2"></i>Cargar PDF
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>Archivos Adjuntos</label>
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item text-center">
+                                                            <h3>Sin datos</h3>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div> -->
+
+
+                            </div>
+                            <div class="card-footer">
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

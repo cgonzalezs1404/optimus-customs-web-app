@@ -10,6 +10,8 @@ import { FacturaComponent } from "./factura/factura.component";
 import { OperacionComponent } from "./operacion/operacion.component";
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule} from 'ngx-bootstrap/pagination';
+import { FlatpickrModule } from "angularx-flatpickr";
+import { FacturaFormComponent } from "./factura/factura-form/factura-form.component";
 
 @NgModule({
 
@@ -17,6 +19,7 @@ import { PaginationModule} from 'ngx-bootstrap/pagination';
         HomeComponent,
         FacturaComponent,
         OperacionComponent,
+        FacturaFormComponent
         
     ],
     imports: [
@@ -28,6 +31,7 @@ import { PaginationModule} from 'ngx-bootstrap/pagination';
         SharedModule,
         ModalModule.forRoot(),
         PaginationModule.forRoot(),
+        FlatpickrModule.forRoot(),
         PAGES_ROUTES
     ]
 })
