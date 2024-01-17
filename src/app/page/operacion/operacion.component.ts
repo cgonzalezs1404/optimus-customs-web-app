@@ -68,7 +68,7 @@ export class OperacionComponent implements OnInit {
   }
 
   private async createList() {
-    let response = await this.giroService.get('').then((resp) => resp);
+    let response = await this.giroService.getData('').then((resp) => resp);
     let giroList = response.body.data;
 
     giroList.forEach((element: any) => {
@@ -91,7 +91,6 @@ export class OperacionComponent implements OnInit {
     this.giroSelect = [...this.giroSelect];
     this.estadoSelect = [...this.estadoSelect];
     this.consumidorSelect = [...this.consumidorSelect];
-    console.log(this.giroSelect);
   }
 
   private initForms() {
@@ -137,6 +136,8 @@ export class OperacionComponent implements OnInit {
 
   public async initCreateForm() {
     this.isUpdate = false;
+    this.formSubmitted = false;
+    this._form.reset();
     this._form.patchValue({
       id: 0,
       codigo: null,

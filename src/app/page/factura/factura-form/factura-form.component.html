@@ -23,16 +23,20 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <form [formGroup]="_form">
+                        <form [formGroup]="_form" (ngSubmit)="submitForm()">
                             <div class="card-body">
                                 <div class="row form-group">
                                     <div class="col-sm-3">
                                         <label>Operacion</label>
-                                        <ng-select></ng-select>
+                                        <ng-select placeholder="Selecciona..." [items]="operacionSelect"
+                                            bindLabel="text" bindValue="value" [clearable]="true"
+                                            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_operacion.errors }"
+                                            formControlName="id_operacion" (change)="operacionSelected($event)" />
+                                            <div *ngIf="_form.controls.id_operacion.errors" class="invalid-feedback">Campo requerido</div>
                                     </div>
                                     <div class="col-sm-1">
                                         <label style="color: transparent;">-</label>
-                                        <button class="form-control btn btn-primary" (click)="addFactura()">
+                                        <button *ngIf="isOpSelected" class="form-control btn btn-primary" (click)="addFactura()">
                                             <i class="fa fa-plus mr-2"></i>Agregar
                                         </button>
                                     </div>
@@ -90,57 +94,76 @@
                                                     </div>
 
                                                     <div class="row form-group">
-                                                        <button class="btn btn-success"><i class="fa fa-check-square-o mr-2"></i> Validar</button>
+                                                        <button class="btn btn-success"><i
+                                                                class="fa fa-check-square-o mr-2"></i> Validar</button>
                                                     </div>
                                                     <form [formGroup]="factura">
                                                         <div class="row form-group">
                                                             <div class="col-sm-3">
                                                                 <label>Estado</label>
-                                                                <ng-select></ng-select>
+                                                                <ng-select placeholder="Selecciona..."
+                                                                    [items]="estadoSelect" bindLabel="text"
+                                                                    bindValue="value" [clearable]="true"
+                                                                    formControlName="id_estado" />
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label>Tipo</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="tipo"/>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Ingresa" formControlName="tipo" />
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label>Serie</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="serie"/>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Ingresa" formControlName="serie" />
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label>Folio</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="folio"/>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Ingresa" formControlName="folio" />
                                                             </div>
                                                         </div>
 
                                                         <div class="row form-group">
                                                             <div class="col-sm-3">
                                                                 <label>RFC</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="rfc"/>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Ingresa" formControlName="rfc" />
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label>Razón Social</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="razon_social"/>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Ingresa"
+                                                                    formControlName="razon_social" />
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label>Precio</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="precio"/>
+                                                                <input class="form-control" type="text"
+                                                                    placeholder="Ingresa" formControlName="precio" />
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label>Fecha de emisión</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="fecha_emision"/>
+                                                                <input class="form-control" type="text" mwlFlatpickr
+                                                                    formControlName="fecha_emision"
+                                                                    [placeholder]="'Selecciona fecha'"
+                                                                    [dateFormat]="'d-m-Y'" [enableTime]="false"
+                                                                    style="background: white;">
                                                             </div>
-                                                            
+
                                                         </div>
 
                                                         <div class="row form-group">
                                                             <div class="col-sm-3">
                                                                 <label>Fecha de cierre</label>
-                                                                <input class="form-control" type="text" placeholder="Ingresa" formControlName="fecha_cierre"/>
+                                                                <input class="form-control" type="text" mwlFlatpickr
+                                                                    formControlName="fecha_cierre"
+                                                                    [placeholder]="'Selecciona fecha'"
+                                                                    [dateFormat]="'d-m-Y'" [enableTime]="false"
+                                                                    style="background: white;">
                                                             </div>
                                                         </div>
                                                     </form>
-                                                    
-                                                    
+
+
                                                 </div>
                                             </div>
 
@@ -148,62 +171,12 @@
                                     </ng-container>
                                 </ng-container>
 
-
-                                <!-- <div class="row form-group">
-                                    <div class="col-sm-12">
-                                        <div class="border rounded p-4 bg-light">
-                                            <div class="row justify-content-between align-items-center">
-                                                <div class="col-sm-9">
-                                                    <h4>Cargar Factura</h4>
-                                                </div>
-                                                <div class="text-end">
-                                                    <button class="btn btn-primary mr-2"><i
-                                                            class="fa fa-plus"></i></button>
-                                                    <button class="btn btn-danger"><i class="fa fa-minus"></i></button>
-                                                </div>
-                                            </div>
-                                            <div class="row form-group mb-5 justify-content-center">
-                                                <div class="col-sm-3">
-
-                                                    <div class="row form-group">
-                                                        <div class="col-sm-6">
-                                                            <label style="color: transparent;">-</label>
-                                                            <input type="file" multiple="true" accept=".xml"
-                                                                id="import-file-xml" hidden #importFileXmlInput>
-                                                            <button type="button" class="btn btn-warning btn-block"
-                                                                (click)="importFileXmlInput.click()">
-                                                                <i class="fa fa-file mr-2"></i>Cargar XML
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <label style="color: transparent;">-</label>
-                                                            <input type="file" multiple="true" accept=".pdf"
-                                                                id="import-file-xml" hidden #importFilePdfInput>
-                                                            <button type="button" class="btn btn-warning btn-block"
-                                                                (click)="importFilePdfInput.click()">
-                                                                <i class="fa fa-file mr-2"></i>Cargar PDF
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label>Archivos Adjuntos</label>
-                                                    <ul class="list-group">
-                                                        <li class="list-group-item text-center">
-                                                            <h3>Sin datos</h3>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div> -->
-
-
                             </div>
                             <div class="card-footer">
-
+                                <button *ngIf="isOpSelected" type="submit" class="btn btn-primary mr-2"><i
+                                        class="fa fa-save mr-2"></i>Guardar</button>
+                                <button type="button" class="btn btn-danger"><i
+                                        class="fa fa-times mr-2"></i>Cancelar</button>
                             </div>
                         </form>
                     </div>

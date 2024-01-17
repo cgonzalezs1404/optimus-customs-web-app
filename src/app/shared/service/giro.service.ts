@@ -11,7 +11,7 @@ export class GiroService {
 
   constructor(private http: HttpClient) { }
 
-  public async get(filters: string): Promise<any> {
+  public async getData(filters: string): Promise<any> {
     const url = `${this._env.app.api}${this._env.app.route.giro}${filters}`;
     return await lastValueFrom(this.http.get(url, { observe: 'response' }).pipe(map((resp) => { return resp; })));
   }
