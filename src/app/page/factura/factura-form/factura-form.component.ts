@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as service from '../../../shared/service/service.index';
 import Swal from 'sweetalert2';
+import moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-factura-form',
@@ -20,12 +22,13 @@ export class FacturaFormComponent implements OnInit {
 
   public session: any;
 
-
   constructor(
+    private router: Router,
     private builder: FormBuilder,
     private sessionService: service.SessionService,
     private operacionService: service.OperacionService,
     private facturaService: service.FacturaService,
+    private facturaArchivoService: service.FacturaArchivoService,
     private estadoService: service.EstadoService) {
 
   }
@@ -33,6 +36,7 @@ export class FacturaFormComponent implements OnInit {
     this.initForms();
     await this.createList();
     this.session = await this.sessionService.getStorageData();
+    console.log(this.session);
   }
 
   private async createList() {
@@ -77,13 +81,13 @@ export class FacturaFormComponent implements OnInit {
       precio: [null],
       fecha_emision: [null],
       fecha_cierre: [null],
-      archivo_xml: [null],
-      archivo_pdf: [null],
       creado_por: [null],
       fecha_creacion: [null],
       actualizado_por: [null],
       fecha_actualizacion: [null],
-      activo: [null]
+      activo: [null],
+      archivo_xml: [null],
+      archivo_pdf: [null]
     });
 
     this.facturas.push(facturaForm);
@@ -103,7 +107,6 @@ export class FacturaFormComponent implements OnInit {
   public async importFile(event: any, index: number): Promise<void> {
 
     let file: File = event.target.files[0];
-    console.log(file);
     if (!file) { return; }
 
     if (file.type !== 'text/xml' && file.type !== 'application/pdf') {
@@ -113,7 +116,11 @@ export class FacturaFormComponent implements OnInit {
     }
 
     if (file.type === 'text/xml') {
+
+
+      const fileDataStr = await this.readFileAsync(file);
       const xmlString = await this.readXmlAsync(file);
+
       var xmlData = new DOMParser().parseFromString(xmlString, 'text/xml');
       const emisorRazonSocial = xmlData.getElementsByTagName('cfdi:Emisor')[0].getAttribute('Nombre');
       const emisorRfc = xmlData.getElementsByTagName('cfdi:Emisor')[0].getAttribute('Rfc');
@@ -122,8 +129,8 @@ export class FacturaFormComponent implements OnInit {
       const total = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Total');
       const fecha = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Fecha');
 
-      var fecha_emision = new Date(fecha ? fecha : '');
-      var fecha_cierre = fecha_emision.setDate(fecha_emision.getDate() + 10);
+      var fecha_emision = moment(fecha ? fecha : '').toDate();
+      var fecha_cierre = moment(fecha ? fecha : '').add(10, 'd').toDate()
       var factura = {
         id_operacion: this._form.value.id_operacion,
         id_estado: 1,
@@ -134,23 +141,23 @@ export class FacturaFormComponent implements OnInit {
         razon_social: emisorRazonSocial,
         precio: total,
         fecha_emision: fecha_emision,
-        fecha_cierre: fecha_emision,
+        fecha_cierre: fecha_cierre,
         creado_por: this.session.username,
         fecha_creacion: new Date(),
         actualizado_por: this.session.username,
         fecha_actualizacion: new Date(),
-        activo: true
+        activo: true,
+        archivo_xml: { name: file.name, url: fileDataStr, file }
       };
 
       this.facturas.at(index).patchValue(factura);
-      //this.facturas.at(index).patchValue({ archivo_xml: { name: file.name, file } });
+      console.log(this.facturas.at(index).value);
     }
 
     if (file.type === 'application/pdf') {
-      //this.facturas.at(index).patchValue({ archivo_pdf: { name: file.name, file } });
+      var fileDataStr = await this.readFileAsync(file);
+      this.facturas.at(index).patchValue({ archivo_pdf: { name: file.name, url: fileDataStr, file } });
     }
-
-    console.log(this.facturas.at(index).value);
   }
 
   public readXmlAsync(file: File): Promise<string> {
@@ -162,13 +169,22 @@ export class FacturaFormComponent implements OnInit {
     });
   }
 
-  public async readFileAsync(file: File): Promise<string | ArrayBuffer> {
+  public async readFileAsync(file: File) {
     return new Promise((resolve, reject) => {
       const reader: any = new FileReader();
       reader.onload = () => { resolve(reader.result); };
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
+  }
+
+  public openFile(url: string): void {
+    if (url.startsWith('http')) {
+      window.open(url);
+    } else if (url.startsWith('data')) {
+      const pdfWindow = window.open('') || new Window;
+      pdfWindow.document.write('<iframe width="100%" height="100%" src="' + encodeURI(url) + '"></iframe>');
+    }
   }
 
   public async submitForm() {
@@ -178,9 +194,53 @@ export class FacturaFormComponent implements OnInit {
       return;
     }
 
-    var payload = this.facturas.value;
-    console.log(payload);
-    var result = await this.facturaService.postDataBulk(JSON.stringify(payload));
-    console.log(result);
+    for (let factura of this.facturas.value) {
+      var result = await this.facturaService.postData(factura);
+      if (result.status === 200) {
+
+        var xmlFormData: FormData = new FormData();
+        xmlFormData.append('payload', JSON.stringify({
+          id: 0,
+          id_factura: result.body.data.id,
+          nombre: factura.archivo_xml.name,
+          url: '',
+          creado_por: this.session.username,
+          fecha_creacion: new Date(),
+          actualizado_por: this.session.username,
+          fecha_actualizacion: new Date(),
+          activo: true
+        }));
+        xmlFormData.append(factura.archivo_xml.name, factura.archivo_xml.file);
+        this.facturaArchivoService.postData(xmlFormData);
+
+        var pdfFormData: FormData = new FormData();
+        pdfFormData.append('payload', JSON.stringify({
+          id: 0,
+          id_factura: result.body.data.id,
+          nombre: factura.archivo_pdf.name,
+          url: '',
+          creado_por: this.session.username,
+          fecha_creacion: new Date(),
+          actualizado_por: this.session.username,
+          fecha_actualizacion: new Date(),
+          activo: true
+        }));
+        pdfFormData.append(factura.archivo_pdf.name, factura.archivo_pdf.file);
+        this.facturaArchivoService.postData(pdfFormData);
+      }
+    }
+    setTimeout(() => {
+      this.router.navigate(['/factura'])
+    }, 500);
+  }
+
+  public getIconFile(fileName: string): string {
+    const name = fileName.replace(/^.*[\\\/]/, '').toLowerCase();
+    if (name.split('.').pop()?.startsWith('pdf')) {
+      return './assets/dist/img/file-ext/pdf.png';
+    } else if (name.split('.').pop()?.startsWith('xml')) {
+      return './assets/dist/img/file-ext/xml.png';
+    }
+    return './assets/dist/img/file-ext/txt.png';
   }
 }

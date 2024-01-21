@@ -15,6 +15,7 @@ export const environment = {
             consumidor: '/api/consumidor',
             estado: '/api/estado',
             factura: '/api/factura',
+            factura_archivo: '/api/factura_archivo',
             operacion: '/api/operacion',
             operacion_x_factura: '/api/pperacion_factura',
             privilegio: '/api/privilegio',

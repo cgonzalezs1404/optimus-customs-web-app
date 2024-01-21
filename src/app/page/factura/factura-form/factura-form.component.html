@@ -32,11 +32,13 @@
                                             bindLabel="text" bindValue="value" [clearable]="true"
                                             [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_operacion.errors }"
                                             formControlName="id_operacion" (change)="operacionSelected($event)" />
-                                            <div *ngIf="_form.controls.id_operacion.errors" class="invalid-feedback">Campo requerido</div>
+                                        <div *ngIf="_form.controls.id_operacion.errors" class="invalid-feedback">Campo
+                                            requerido</div>
                                     </div>
                                     <div class="col-sm-1">
                                         <label style="color: transparent;">-</label>
-                                        <button *ngIf="isOpSelected" class="form-control btn btn-primary" (click)="addFactura()">
+                                        <button type="button" *ngIf="isOpSelected" class="form-control btn btn-primary"
+                                            (click)="addFactura()">
                                             <i class="fa fa-plus mr-2"></i>Agregar
                                         </button>
                                     </div>
@@ -85,11 +87,36 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <label>Archivos Adjuntos</label>
-                                                            <ul class="list-group">
+                                                            <ul *ngIf="facturas.at(i).value.archivo_xml == null && facturas.at(i).value.archivo_pdf == null"
+                                                                class="list-group">
                                                                 <li class="list-group-item text-center">
-                                                                    <h3>Sin datos</h3>
+                                                                    <h3>Sin Datos</h3>
                                                                 </li>
                                                             </ul>
+                                                            <div class="list-group">
+                                                                <div *ngIf="facturas.at(i).value.archivo_xml != null" class="list-group-item flex-column align-items-start">
+                                                                    <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between" style="cursor: pointer; width: 95%;"
+                                                                        (click)="openFile(facturas.at(i).value.archivo_xml.url)">
+                                                                        <a>
+                                                                            <img class="mr-2" [src]="getIconFile(facturas.at(i).value.archivo_xml.name)" width="30px"
+                                                                              height="30px" alt="file-list"
+                                                                              onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_xml.name}}</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div *ngIf="facturas.at(i).value.archivo_pdf != null" class="list-group-item flex-column align-items-start">
+                                                                    <div class="d-flex w-100 justify-content-between">
+                                                                        <div class="d-flex justify-content-between" style="cursor: pointer; width: 95%;"
+                                                                        (click)="openFile(facturas.at(i).value.archivo_pdf.url)">
+                                                                        <a>
+                                                                            <img class="mr-2" [src]="getIconFile(facturas.at(i).value.archivo_pdf.name)" width="30px"
+                                                                              height="30px" alt="file-list"
+                                                                              onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_pdf.name}}</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
 
