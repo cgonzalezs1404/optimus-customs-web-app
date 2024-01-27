@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FacturaPendienteComponent } from './factura-pendiente.component';
 
-describe('FacturaPendienteComponent', () => {
+describe('FacturaActivaComponent', () => {
   let component: FacturaPendienteComponent;
   let fixture: ComponentFixture<FacturaPendienteComponent>;
 

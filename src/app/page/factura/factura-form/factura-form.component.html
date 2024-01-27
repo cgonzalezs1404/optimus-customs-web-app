@@ -94,25 +94,33 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="list-group">
-                                                                <div *ngIf="facturas.at(i).value.archivo_xml != null" class="list-group-item flex-column align-items-start">
+                                                                <div *ngIf="facturas.at(i).value.archivo_xml != null"
+                                                                    class="list-group-item flex-column align-items-start">
                                                                     <div class="d-flex w-100 justify-content-between">
-                                                                        <div class="d-flex justify-content-between" style="cursor: pointer; width: 95%;"
-                                                                        (click)="openFile(facturas.at(i).value.archivo_xml.url)">
-                                                                        <a>
-                                                                            <img class="mr-2" [src]="getIconFile(facturas.at(i).value.archivo_xml.name)" width="30px"
-                                                                              height="30px" alt="file-list"
-                                                                              onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_xml.name}}</a>
+                                                                        <div class="d-flex justify-content-between"
+                                                                            style="cursor: pointer; width: 95%;"
+                                                                            (click)="openFile(facturas.at(i).value.archivo_xml.url)">
+                                                                            <a>
+                                                                                <img class="mr-2"
+                                                                                    [src]="getIconFile(facturas.at(i).value.archivo_xml.name)"
+                                                                                    width="30px" height="30px"
+                                                                                    alt="file-list"
+                                                                                    onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_xml.name}}</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div *ngIf="facturas.at(i).value.archivo_pdf != null" class="list-group-item flex-column align-items-start">
+                                                                <div *ngIf="facturas.at(i).value.archivo_pdf != null"
+                                                                    class="list-group-item flex-column align-items-start">
                                                                     <div class="d-flex w-100 justify-content-between">
-                                                                        <div class="d-flex justify-content-between" style="cursor: pointer; width: 95%;"
-                                                                        (click)="openFile(facturas.at(i).value.archivo_pdf.url)">
-                                                                        <a>
-                                                                            <img class="mr-2" [src]="getIconFile(facturas.at(i).value.archivo_pdf.name)" width="30px"
-                                                                              height="30px" alt="file-list"
-                                                                              onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_pdf.name}}</a>
+                                                                        <div class="d-flex justify-content-between"
+                                                                            style="cursor: pointer; width: 95%;"
+                                                                            (click)="openFile(facturas.at(i).value.archivo_pdf.url)">
+                                                                            <a>
+                                                                                <img class="mr-2"
+                                                                                    [src]="getIconFile(facturas.at(i).value.archivo_pdf.name)"
+                                                                                    width="30px" height="30px"
+                                                                                    alt="file-list"
+                                                                                    onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_pdf.name}}</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -171,8 +179,11 @@
                                                                 <label>Fecha de emisión</label>
                                                                 <input class="form-control" type="text" mwlFlatpickr
                                                                     formControlName="fecha_emision"
-                                                                    [placeholder]="'Selecciona fecha'"
-                                                                    [dateFormat]="'d-m-Y'" [enableTime]="false"
+                                                                    [placeholder]="flatPickerOpt.placeholder"
+                                                                    [dateFormat]="flatPickerOpt.dateFormat"
+                                                                    [enableTime]="flatPickerOpt.enableTime"
+                                                                    [altFormat]="flatPickerOpt.altFormat"
+                                                                    [altInput]="flatPickerOpt.altInput"
                                                                     style="background: white;">
                                                             </div>
 
@@ -183,8 +194,11 @@
                                                                 <label>Fecha de cierre</label>
                                                                 <input class="form-control" type="text" mwlFlatpickr
                                                                     formControlName="fecha_cierre"
-                                                                    [placeholder]="'Selecciona fecha'"
-                                                                    [dateFormat]="'d-m-Y'" [enableTime]="false"
+                                                                    [placeholder]="flatPickerOpt.placeholder"
+                                                                    [dateFormat]="flatPickerOpt.dateFormat"
+                                                                    [enableTime]="flatPickerOpt.enableTime"
+                                                                    [altFormat]="flatPickerOpt.altFormat"
+                                                                    [altInput]="flatPickerOpt.altInput"
                                                                     style="background: white;">
                                                             </div>
                                                         </div>

@@ -8,14 +8,12 @@ import Swal from 'sweetalert2';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
 
-
 @Component({
   selector: 'app-factura-activa',
   templateUrl: './factura-activa.component.html',
   styleUrl: './factura-activa.component.css'
 })
-export class FacturaActivaComponent implements OnInit {
-
+export class FacturaActivaComponent {
   @ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
   @ViewChild('tableHeaderHead') _tableHeaderHead: ElementRef<HTMLInputElement> | any;
   public _modalRef?: BsModalRef;
@@ -34,7 +32,7 @@ export class FacturaActivaComponent implements OnInit {
   public formSubmitted: boolean = false;
   public isReject: boolean = false;
 
-  public _session : any = null;
+  public _session: any = null;
 
   public modalConfig: any = {
     backdrop: true,
@@ -42,6 +40,16 @@ export class FacturaActivaComponent implements OnInit {
     ignoreBackdropClick: true,
     animated: true,
     class: 'modal-xl modal-dialog-centered'
+  };
+
+  public flatPickerOpt = {
+    placeholder: 'dd/mm/yyyy',
+    altFormat: 'd/m/Y',
+    dateFormat: 'Y-m-d',
+    altInput: true,
+    enableTime: false,
+    mode: 'single',
+    locale: {}
   };
 
   constructor(
@@ -52,7 +60,7 @@ export class FacturaActivaComponent implements OnInit {
     private estadoService: service.EstadoService,
     private operacionService: service.OperacionService,
     private session: service.SessionService) {
-
+    moment.locale("es");
   }
   async ngOnInit(): Promise<void> {
     this.initForms();
@@ -94,10 +102,12 @@ export class FacturaActivaComponent implements OnInit {
       serie: [null],
       folio: [null],
       total: [null],
-      aprobado: null,
+      aprobado: true,
+      pagado: false,
       fecha_emision: [null],
       fecha_cierre: [null],
-      descendente: [true],
+      page_descending: [true],
+      activo: [true],
     });
 
     this._form = this.builder.group({
@@ -111,7 +121,8 @@ export class FacturaActivaComponent implements OnInit {
       folio: [null],
       total: [null],
       descripcion: [null],
-      aprobado: null,
+      aprobado: [null],
+      pagado: [null],
       fecha_emision: [null],
       fecha_cierre: [null],
       comentarios: [null],
@@ -126,10 +137,12 @@ export class FacturaActivaComponent implements OnInit {
   public async searchData() {
     let urlFilters: string = '';
     urlFilters += `?page_number=${(this._dtData.metadata.currentPage !== 0) ? this._dtData.metadata.currentPage : 1}`
-    urlFilters += `&page_size=${(this._dtData.metadata.pageSize !== 0) ? this._dtData.metadata.pageSize : 10}`
+    urlFilters += `&page_size=${(this._dtData.metadata.pageSize !== 0) ? this._dtData.metadata.pageSize : 10}`;
+
     for (var key in this._searchForm.value) {
-      urlFilters += this._searchForm.value[key] ? `&${key}=${this._searchForm.value[key]}` : '';
+      urlFilters += this._searchForm.value[key] !== null ? `&${key}=${this._searchForm.value[key]}` : '';
     }
+    console.log(urlFilters);
     var result = await this.facturaService.getData(urlFilters);
     if (result.status === 200) {
       this._dtData = result.body;
@@ -143,6 +156,7 @@ export class FacturaActivaComponent implements OnInit {
   public async initEditForm(item: any) {
     this.isReject = false;
     this.isUpdate = true;
+    this._form.disable();
     this._form.reset();
     this._form.patchValue(item);
     this._form.controls.comentarios.setValidators(null);
@@ -189,11 +203,10 @@ export class FacturaActivaComponent implements OnInit {
       });
     } else {
       item.patchValue({
-        aprobado: true,
+        pagado: true,
         fecha_actualizacion: new Date(),
         actualizado_por: this._session.username
       });
-      console.log(item.value);
       let result = await this.facturaService.putData(item.value.id, item.value);
       if (result.status === 200) {
         this._modalRef?.hide();

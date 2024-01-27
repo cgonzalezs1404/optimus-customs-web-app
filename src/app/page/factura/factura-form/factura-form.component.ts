@@ -22,6 +22,16 @@ export class FacturaFormComponent implements OnInit {
 
   public session: any;
 
+  public flatPickerOpt = {
+    placeholder: 'dd/mm/yyyy',
+    altFormat: 'd/m/Y',
+    dateFormat: 'Y-m-d',
+    altInput: true,
+    enableTime: false,
+    mode: 'single',
+    locale: {}
+  };
+
   constructor(
     private router: Router,
     private builder: FormBuilder,
@@ -79,6 +89,8 @@ export class FacturaFormComponent implements OnInit {
       serie: [null],
       razon_social: [null],
       precio: [null],
+      aprobado: [null],
+      pagado: [null],
       fecha_emision: [null],
       fecha_cierre: [null],
       creado_por: [null],
@@ -129,8 +141,8 @@ export class FacturaFormComponent implements OnInit {
       const total = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Total');
       const fecha = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Fecha');
 
-      var fecha_emision = moment(fecha ? fecha : '').toDate();
-      var fecha_cierre = moment(fecha ? fecha : '').add(10, 'd').toDate()
+      var emision = moment(fecha ? fecha : '').toDate();
+      var cierre = moment(fecha ? fecha : '').add(10, 'd').toDate()
       var factura = {
         id_operacion: this._form.value.id_operacion,
         id_estado: 1,
@@ -140,8 +152,10 @@ export class FacturaFormComponent implements OnInit {
         serie: serie,
         razon_social: emisorRazonSocial,
         precio: total,
-        fecha_emision: fecha_emision,
-        fecha_cierre: fecha_cierre,
+        aprobado: false,
+        pagado: false,
+        fecha_emision: emision,
+        fecha_cierre: cierre,
         creado_por: this.session.username,
         fecha_creacion: new Date(),
         actualizado_por: this.session.username,
@@ -151,7 +165,6 @@ export class FacturaFormComponent implements OnInit {
       };
 
       this.facturas.at(index).patchValue(factura);
-      console.log(this.facturas.at(index).value);
     }
 
     if (file.type === 'application/pdf') {

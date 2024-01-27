@@ -1,1 +1,259 @@
-<p>factura-pendiente works!</p>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Búsqueda</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form [formGroup]="_searchForm" (ngSubmit)="searchData()">
+            <div class="card-body">
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label for="exampleInputPassword1">Operación</label>
+                  <ng-select placeholder="Select..." [items]="operacionSelect" bindLabel="text" bindValue="value"
+                    [clearable]="true" formControlName="id_operacion" />
+                </div>
+                <div class="col-sm-3">
+                  <label for="exampleInputPassword1">Estado</label>
+                  <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+                    [clearable]="true" formControlName="id_estado" />
+                </div>
+                <div class="col-sm-3">
+                  <label>Tipo</label>
+                  <input type="text" class="form-control" formControlName="tipo" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Razón Social</label>
+                  <input type="text" class="form-control" formControlName="razon_social" placeholder="Ingrese">
+                </div>
+
+              </div>
+
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label>RFC</label>
+                  <input type="text" class="form-control" formControlName="rfc" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Serie</label>
+                  <input type="text" class="form-control" formControlName="serie" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Folio</label>
+                  <input type="text" class="form-control" formControlName="folio" placeholder="Ingrese">
+                </div>
+                <div class="col-sm-3">
+                  <label>Total</label>
+                  <input type="text" class="form-control" formControlName="total" placeholder="Ingrese">
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <div class="col-sm-3">
+                  <label>Fecha Emisión</label>
+                  <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_emision"
+                    [placeholder]="flatPickerOpt.placeholder" [dateFormat]="flatPickerOpt.dateFormat"
+                    [enableTime]="flatPickerOpt.enableTime" [altFormat]="flatPickerOpt.altFormat"
+                    [altInput]="flatPickerOpt.altInput">
+                </div>
+                <div class="col-sm-3">
+                  <label>Fecha Pago</label>
+                  <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_cierre"
+                    [placeholder]="flatPickerOpt.placeholder" [dateFormat]="flatPickerOpt.dateFormat"
+                    [enableTime]="flatPickerOpt.enableTime" [altFormat]="flatPickerOpt.altFormat"
+                    [altInput]="flatPickerOpt.altInput" >
+                </div>
+                <div class="col-sm-3 text-center">
+                  <label class="control-label" style="color: transparent;">-</label>
+                  <div class="form-check">
+                    <div class="icheck-primary">
+                      <input type="checkbox" id="checkboxPrimary1" formControlName="page_descending">
+                      <label for="checkboxPrimary1">Descendiente</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer clearfix">
+              <button type="submit" class="btn btn-primary"><span class="fa fa-search mr-2"></span>Buscar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+
+          <div class="card-header">
+            <div class="row justify-content-between align-items-center">
+              <div class="col-sm-1">
+                <h3 class="card-title">Información</h3>
+              </div>
+              <div class="text-end">
+                <button class="btn btn-warning btn-sm" (click)="initCreateForm()">
+                  <span class="fa fa-plus mr-2"></span>Agregar</button>
+              </div>
+
+
+            </div>
+
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead style="background-color: #eee!important">
+                  <tr #tableHeaderHead>
+                    <th class="text-center">Operación</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Tipo</th>
+                    <th class="text-center">Razón Social</th>
+                    <th class="text-center">Fecha Inicio</th>
+                    <th class="text-center">Fecha Fin</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-template [ngIf]="(_dtData.data.length === 0)" [ngIfElse]="tableBody">
+                    <td [attr.colspan]="_dataObjectLength" class="text-center">
+                      <span>Sin Datos</span>
+                    </td>
+                  </ng-template>
+
+                  <ng-template #tableBody>
+                    <tr *ngFor="let item of _dtData.data">
+                      <td>{{catalogValue('operacion',item.id_operacion)}}</td>
+                      <td>{{catalogValue('estado',item.id_estado)}}</td>
+                      <td>{{item.tipo}}</td>
+                      <td>{{item.razon_social}}</td>
+                      <td>{{item.fecha_emision | date: 'dd/MM/yyyy'}}</td>
+                      <td>{{item.fecha_cierre | date: 'dd/MM/yyyy'}}</td>
+                      <td class="text-center">
+                        <button class="btn btn-primary mr-2 btn-sm" (click)="initEditForm(item)"><span
+                            class="fa fa-edit"></span> Aprobar</button>
+                        <button class="btn btn-danger btn-sm" (click)="initDeleteForm(item)"><span
+                            class="fa fa-times"></span> Rechazar</button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div class="card-footer clearfix" *ngIf="_dtData.metadata && _dtData.metadata.totalCount > 0">
+            <div class="row">
+              <div class="col-md-auto">
+                <select class="custom-select" [ngModel]="_dtData.metadata.pageSize"
+                  (ngModelChange)="onChangeDataLength($event)">
+                  <option *ngFor="let item of _dataPageLength">{{item}}</option>
+                </select>
+              </div>
+              <div class="col-md-auto">
+                <pagination [boundaryLinks]="true" [itemsPerPage]="_dtData.metadata.pageSize"
+                  [totalItems]="_dtData.metadata.totalCount" [(ngModel)]="_dtData.metadata.currentPage" [maxSize]="5"
+                  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                  (pageChanged)="pageChanged($event)"></pagination>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<ng-template #modalView>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Factura</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="_modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="_form" (ngSubmit)="submitForm(_form)">
+    <div *ngIf="!isReject" class="modal-body">
+
+      <div class="form-group row">
+        <div class="col-sm-4">
+          <label class="">Operación</label>
+          <ng-select placeholder="Select..." [items]="operacionSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_operacion"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_operacion.errors }" />
+          <div *ngIf="_form.controls.id_operacion.errors" class="invalid-feedback">Campo vacio</div>
+        </div>
+
+        <div class="col-sm-4">
+          <label class="">Estado</label>
+          <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_estado"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }" />
+          <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
+        </div>
+
+        <div class="col-sm-4">
+          <label class="">Tipo</label>
+          <input type="text" class="form-control" formControlName="tipo" />
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-4">
+          <label class="">Razón Social</label>
+          <input type="text" class="form-control" formControlName="razon_social" />
+        </div>
+
+        <div class="col-sm-4">
+          <label>Fecha Emisión</label>
+          <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_emision"
+            [placeholder]="'Selecciona fecha'" [dateFormat]="'d-m-Y'" [enableTime]="false" style="background: none;">
+        </div>
+
+        <div class="col-sm-4">
+          <label>Fecha Cierre</label>
+          <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_cierre"
+            [placeholder]="'Selecciona fecha'" [dateFormat]="'d-m-Y'" [enableTime]="false" style="background: none;">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <label class="">Descripción</label>
+          <textarea type="text" class="form-control" formControlName="descripcion" [rows]="5"
+            style="resize: none;"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="isReject" class="modal-body">
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <label class="">Comentarios</label>
+          <textarea type="text" class="form-control" formControlName="comentarios" [rows]="5" style="resize: none;"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.comentarios.errors }"></textarea>
+          <div *ngIf="_form.controls.comentarios.errors" class="invalid-feedback">Campo vacio</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Aceptar</button>
+      <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()">Cancelar</button>
+    </div>
+  </form>
+
+</ng-template>
