@@ -83,7 +83,7 @@ export class FacturaPendienteComponent implements OnInit {
       this.estadoSelect.push({ value: element.id, text: element.nombre });
     });
 
-    response = await this.operacionService.getData('?page_size=9999&activo=true').then((resp) => resp);
+    response = await this.operacionService.getData('?page_size=9999&activo=true&finalizado=false').then((resp) => resp);
     let operacionList = response.body.data;
 
     operacionList.forEach((element: any) => {
@@ -98,14 +98,15 @@ export class FacturaPendienteComponent implements OnInit {
     this._searchForm = this.builder.group({
       id_operacion: [null],
       id_estado: [null],
+      codigo: [null],
       tipo: [null],
       razon_social: [null],
       rfc: [null],
       serie: [null],
       folio: [null],
-      total: [null],
-      aprobado: false,
-      pagado: false,
+      precio: [null],
+      aprobado: [false],
+      pagado: [null],
       fecha_emision: [null],
       fecha_cierre: [null],
       page_descending: [true],
@@ -116,12 +117,13 @@ export class FacturaPendienteComponent implements OnInit {
       id: [null, Validators.required],
       id_operacion: [null, Validators.required],
       id_estado: [null, Validators.required],
+      codigo: [null],
       tipo: [null],
       razon_social: [null],
       rfc: [null],
       serie: [null],
       folio: [null],
-      total: [null],
+      precio: [null],
       descripcion: [null],
       aprobado: [null],
       pagado: [null],
@@ -144,7 +146,6 @@ export class FacturaPendienteComponent implements OnInit {
     for (var key in this._searchForm.value) {
       urlFilters += this._searchForm.value[key] !== null ? `&${key}=${this._searchForm.value[key]}` : '';
     }
-    console.log(urlFilters);
     var result = await this.facturaService.getData(urlFilters);
     if (result.status === 200) {
       this._dtData = result.body;
@@ -194,10 +195,17 @@ export class FacturaPendienteComponent implements OnInit {
         confirmButtonText: "!Sí, borralo!"
       }).then(async (result) => {
         if (result.isConfirmed) {
-          let result = await this.facturaService.deleteData(item.id);
+          item.patchValue({
+            aprobado: false,
+            pagado: true,
+            fecha_actualizacion: new Date(),
+            actualizado_por: this._session.username
+          });
+          let result = await this.facturaService.putData(item.value.id, item.value);
           if (result.status === 200) {
+            this._modalRef?.hide();
             const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.addEventListener('mouseenter', Swal.stopTimer); toast.addEventListener('mouseleave', Swal.resumeTimer); } });
-            Toast.fire({ icon: 'success', title: 'Borrado Correcto' });
+            Toast.fire({ icon: 'success', title: 'Rechazado Correcto' });
             await this.searchData();
           }
         }

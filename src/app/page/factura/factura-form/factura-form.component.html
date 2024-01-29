@@ -134,13 +134,13 @@
                                                     </div>
                                                     <form [formGroup]="factura">
                                                         <div class="row form-group">
-                                                            <div class="col-sm-3">
+                                                            <!-- <div class="col-sm-3">
                                                                 <label>Estado</label>
                                                                 <ng-select placeholder="Selecciona..."
                                                                     [items]="estadoSelect" bindLabel="text"
                                                                     bindValue="value" [clearable]="true"
                                                                     formControlName="id_estado" />
-                                                            </div>
+                                                            </div> -->
                                                             <div class="col-sm-3">
                                                                 <label>Tipo</label>
                                                                 <input class="form-control" type="text"
@@ -156,14 +156,15 @@
                                                                 <input class="form-control" type="text"
                                                                     placeholder="Ingresa" formControlName="folio" />
                                                             </div>
-                                                        </div>
-
-                                                        <div class="row form-group">
                                                             <div class="col-sm-3">
                                                                 <label>RFC</label>
                                                                 <input class="form-control" type="text"
                                                                     placeholder="Ingresa" formControlName="rfc" />
                                                             </div>
+                                                        </div>
+
+                                                        <div class="row form-group">
+                                                            
                                                             <div class="col-sm-3">
                                                                 <label>Razón Social</label>
                                                                 <input class="form-control" type="text"
@@ -186,10 +187,6 @@
                                                                     [altInput]="flatPickerOpt.altInput"
                                                                     style="background: white;">
                                                             </div>
-
-                                                        </div>
-
-                                                        <div class="row form-group">
                                                             <div class="col-sm-3">
                                                                 <label>Fecha de cierre</label>
                                                                 <input class="form-control" type="text" mwlFlatpickr
@@ -201,7 +198,16 @@
                                                                     [altInput]="flatPickerOpt.altInput"
                                                                     style="background: white;">
                                                             </div>
+
                                                         </div>
+
+                                                        <div class="form-group row">
+                                                            <div class="col-sm-12">
+                                                              <label class="">Descripción</label>
+                                                              <textarea type="text" class="form-control" formControlName="descripcion" [rows]="5"
+                                                                style="resize: none;"></textarea>
+                                                            </div>
+                                                          </div>
                                                     </form>
 
 

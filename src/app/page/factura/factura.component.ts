@@ -17,30 +17,15 @@ export class FacturaComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.initForms();
+
   }
 
-  private initForms() {
-    this._searchForm = this.builder.group({
-      id_operacion: [null],
-      id_estado: [null],
-      tipo: [null],
-      razon_social: [null],
-      rfc: [null],
-      serie: [null],
-      folio: [null],
-      total: [null],
-      fecha_emision: [null],
-      fecha_cierre: [null],
-      descendente: [true],
-    });
-  }
 
   public async searchData() {
 
   }
 
-  public async initCreateForm(){
-    
+  public async initCreateForm() {
+
   }
 }

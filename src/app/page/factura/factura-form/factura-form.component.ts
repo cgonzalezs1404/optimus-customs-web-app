@@ -46,11 +46,10 @@ export class FacturaFormComponent implements OnInit {
     this.initForms();
     await this.createList();
     this.session = await this.sessionService.getStorageData();
-    console.log(this.session);
   }
 
   private async createList() {
-    let response = await this.operacionService.getData('?page_size=9999&activo=true').then((resp) => resp);
+    let response = await this.operacionService.getData('?page_size=9999&activo=true&finalizado=false').then((resp) => resp);
     let operacionList = response.body.data;
 
     operacionList.forEach((element: any) => {
@@ -83,6 +82,7 @@ export class FacturaFormComponent implements OnInit {
     const facturaForm = this.builder.group({
       id_operacion: [null],
       id_estado: [null],
+      codigo: [null],
       tipo: [null],
       folio: [null],
       rfc: [null],
@@ -91,6 +91,7 @@ export class FacturaFormComponent implements OnInit {
       precio: [null],
       aprobado: [null],
       pagado: [null],
+      descripcion: [null],
       fecha_emision: [null],
       fecha_cierre: [null],
       creado_por: [null],
@@ -140,20 +141,33 @@ export class FacturaFormComponent implements OnInit {
       const serie = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Serie');
       const total = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Total');
       const fecha = xmlData.getElementsByTagName('cfdi:Comprobante')[0].getAttribute('Fecha');
+      const descripcion = xmlData.getElementsByTagName('cfdi:Conceptos')[0].children;
+      let conceptos: any = '';
+
+      if (descripcion.length > 1) {
+        for (var concepto of descripcion) {
+          conceptos += `${concepto.getAttribute('Descripcion')}|`;
+        }
+      } else {
+        conceptos = descripcion[0].getAttribute('Descripcion');
+      }
+
 
       var emision = moment(fecha ? fecha : '').toDate();
       var cierre = moment(fecha ? fecha : '').add(10, 'd').toDate()
       var factura = {
         id_operacion: this._form.value.id_operacion,
         id_estado: 1,
+        codigo: '',
         tipo: emisorRfc == 'LCO220224HN3' ? 'EMISOR' : 'RECEPTOR',
         folio: folio,
         rfc: emisorRfc,
         serie: serie,
         razon_social: emisorRazonSocial,
         precio: total,
-        aprobado: false,
-        pagado: false,
+        descripcion: conceptos,
+        aprobado: null,
+        pagado: null,
         fecha_emision: emision,
         fecha_cierre: cierre,
         creado_por: this.session.username,

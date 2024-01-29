@@ -12,6 +12,10 @@
                         <div class="card-body">
                             <div class="row form-group">
                                 <div class="col-sm-3">
+                                    <label for="exampleInputPassword1">Código</label>
+                                    <input type="text" class="form-control" formControlName="codigo" placeholder="Ingrese">
+                                  </div>
+                                <div class="col-sm-3">
                                     <label for="exampleInputPassword1">Operación</label>
                                     <ng-select placeholder="Select..." [items]="operacionSelect" bindLabel="text"
                                         bindValue="value" [clearable]="true" formControlName="id_operacion" />
@@ -26,15 +30,15 @@
                                     <input type="text" class="form-control" formControlName="tipo"
                                         placeholder="Ingrese">
                                 </div>
+
+                            </div>
+
+                            <div class="row form-group">
                                 <div class="col-sm-3">
                                     <label>Razón Social</label>
                                     <input type="text" class="form-control" formControlName="razon_social"
                                         placeholder="Ingrese">
                                 </div>
-
-                            </div>
-
-                            <div class="row form-group">
                                 <div class="col-sm-3">
                                     <label>RFC</label>
                                     <input type="text" class="form-control" formControlName="rfc" placeholder="Ingrese">
@@ -49,14 +53,14 @@
                                     <input type="text" class="form-control" formControlName="folio"
                                         placeholder="Ingrese">
                                 </div>
-                                <div class="col-sm-3">
-                                    <label>Total</label>
-                                    <input type="text" class="form-control" formControlName="total"
-                                        placeholder="Ingrese">
-                                </div>
                             </div>
 
                             <div class="row form-group">
+                                <div class="col-sm-3">
+                                    <label>Precio</label>
+                                    <input type="text" class="form-control" formControlName="precio"
+                                        placeholder="Ingrese">
+                                </div>
                                 <div class="col-sm-3">
                                     <label>Fecha Emisión</label>
                                     <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_emision"
@@ -108,12 +112,6 @@
                             <div class="col-sm-1">
                                 <h3 class="card-title">Información</h3>
                             </div>
-                            <!-- <div class="text-end">
-                  <button class="btn btn-warning btn-sm" (click)="initCreateForm()">
-                    <span class="fa fa-plus mr-2"></span>Agregar</button>
-                </div> -->
-
-
                         </div>
 
                     </div>
@@ -124,6 +122,7 @@
                                 <thead style="background-color: #eee!important">
                                     <tr #tableHeaderHead>
                                         <th class="text-center">Operación</th>
+                                        <th class="text-center">Código</th>
                                         <th class="text-center">Estado</th>
                                         <th class="text-center">Tipo</th>
                                         <th class="text-center">Razón Social</th>
@@ -142,6 +141,7 @@
                                     <ng-template #tableBody>
                                         <tr *ngFor="let item of _dtData.data">
                                             <td>{{catalogValue('operacion',item.id_operacion)}}</td>
+                                            <td>{{item.codigo}}</td>
                                             <td>{{catalogValue('estado',item.id_estado)}}</td>
                                             <td>{{item.tipo}}</td>
                                             <td>{{item.razon_social}}</td>
@@ -149,8 +149,8 @@
                                             <td>{{item.fecha_cierre | date: 'dd/MM/yyyy'}}</td>
                                             <td class="text-center">
                                                 <button class="btn btn-warning mr-2 btn-sm"
-                                                    (click)="initEditForm(item)"><span class="fa fa-eye"></span>
-                                                    Ver</button>
+                                                    (click)="initEditForm(item)"><span class="fa fa-money"></span>
+                                                    Pagar</button>
                                                 <button class="btn btn-danger btn-sm"
                                                     (click)="initDeleteForm(item)"><span class="fa fa-trash"></span>
                                                     Eliminar</button>
@@ -189,7 +189,7 @@
 
 <ng-template #modalView>
     <div class="modal-header">
-        <h4 class="modal-title pull-left">Factura</h4>
+        <h4 class="modal-title pull-left">Factura: {{_form.value.codigo}}</h4>
         <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="_modalRef?.hide()">
             <span aria-hidden="true" class="visually-hidden">&times;</span>
         </button>
@@ -244,6 +244,21 @@
             </div>
 
             <div class="form-group row">
+                <div class="col-sm-4">
+                    <label class="">Serie</label>
+                    <input type="text" class="form-control" formControlName="serie" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="">Folio</label>
+                    <input type="text" class="form-control" formControlName="folio" />
+                </div>
+                <div class="col-sm-4">
+                    <label class="">Precio</label>
+                    <input type="text" class="form-control" formControlName="precio" />
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <div class="col-sm-12">
                     <label class="">Descripción</label>
                     <textarea type="text" class="form-control" formControlName="descripcion" [rows]="5"
@@ -265,8 +280,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-success"><span class="fa fa-check mr-2"></span>Pagar</button>
-            <button type="button" class="btn btn-primary" (click)="_modalRef?.hide()"><span class="fa fa-times mr-2"></span>Cerrar</button>
+            <button type="submit" class="btn btn-primary"><span class="fa fa-check mr-2"></span>Aceptar</button>
+            <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()"><span class="fa fa-times mr-2"></span>Cancelar</button>
         </div>
     </form>
 

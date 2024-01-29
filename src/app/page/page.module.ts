@@ -16,17 +16,21 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { FacturaActivaComponent } from './factura/factura-activa/factura-activa.component';
 import { FacturaPendienteComponent } from './factura/factura-pendiente/factura-pendiente.component';
 import { FacturaHistorialComponent } from './factura/factura-historial/factura-historial.component';
+import { OperacionActivaComponent } from "./operacion/operacion-activa/operacion-activa.component";
+import { OperacionHistorialComponent } from "./operacion/operacion-historial/operacion-historial.component";
 
 @NgModule({
 
     declarations: [
         HomeComponent,
         FacturaComponent,
-        OperacionComponent,
         FacturaFormComponent,
         FacturaActivaComponent,
         FacturaPendienteComponent,
-        FacturaHistorialComponent
+        FacturaHistorialComponent,
+        OperacionComponent,
+        OperacionActivaComponent,
+        OperacionHistorialComponent
         
     ],
     imports: [

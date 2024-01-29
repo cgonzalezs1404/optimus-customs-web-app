@@ -57,6 +57,7 @@ export class FacturaActivaComponent {
     private builder: FormBuilder,
     private router: Router,
     private facturaService: service.FacturaService,
+    private facturaArchivoService: service.FacturaArchivoService,
     private estadoService: service.EstadoService,
     private operacionService: service.OperacionService,
     private session: service.SessionService) {
@@ -81,7 +82,7 @@ export class FacturaActivaComponent {
       this.estadoSelect.push({ value: element.id, text: element.nombre });
     });
 
-    response = await this.operacionService.getData('?page_size=9999&activo=true').then((resp) => resp);
+    response = await this.operacionService.getData('?page_size=9999&activo=true&finalizado=false').then((resp) => resp);
     let operacionList = response.body.data;
 
     operacionList.forEach((element: any) => {
@@ -96,14 +97,15 @@ export class FacturaActivaComponent {
     this._searchForm = this.builder.group({
       id_operacion: [null],
       id_estado: [null],
+      codigo: [null],
       tipo: [null],
       razon_social: [null],
       rfc: [null],
       serie: [null],
       folio: [null],
-      total: [null],
-      aprobado: true,
-      pagado: false,
+      precio: [null],
+      aprobado: [true],
+      pagado: [false],
       fecha_emision: [null],
       fecha_cierre: [null],
       page_descending: [true],
@@ -114,12 +116,13 @@ export class FacturaActivaComponent {
       id: [null, Validators.required],
       id_operacion: [null, Validators.required],
       id_estado: [null, Validators.required],
+      codigo: [null],
       tipo: [null],
       razon_social: [null],
       rfc: [null],
       serie: [null],
       folio: [null],
-      total: [null],
+      precio: [null],
       descripcion: [null],
       aprobado: [null],
       pagado: [null],
@@ -142,10 +145,10 @@ export class FacturaActivaComponent {
     for (var key in this._searchForm.value) {
       urlFilters += this._searchForm.value[key] !== null ? `&${key}=${this._searchForm.value[key]}` : '';
     }
-    console.log(urlFilters);
     var result = await this.facturaService.getData(urlFilters);
     if (result.status === 200) {
       this._dtData = result.body;
+      console.log(this._dtData);
     }
   }
 
@@ -154,6 +157,7 @@ export class FacturaActivaComponent {
   }
 
   public async initEditForm(item: any) {
+    this.formSubmitted = false;
     this.isReject = false;
     this.isUpdate = true;
     this._form.disable();
@@ -165,8 +169,10 @@ export class FacturaActivaComponent {
   }
 
   public async initDeleteForm(item: any) {
+    this.formSubmitted = false;
     this.isReject = true;
     this.isUpdate = true;
+    this._form.enable();
     this._form.reset();
     this._form.patchValue(item);
     this._form.controls.comentarios.setValidators([Validators.required]);
@@ -193,8 +199,26 @@ export class FacturaActivaComponent {
         confirmButtonText: "!Sí, borralo!"
       }).then(async (result) => {
         if (result.isConfirmed) {
-          let result = await this.facturaService.deleteData(item.id);
+
+          let facturasFile = await this.facturaArchivoService.getData(`?id_factura=${item.value.id}`);
+          if (facturasFile.status !== 200) {
+            return;
+          }
+          if (facturasFile.body.data.length !== 0) {
+            for (let archivo of facturasFile.body.data) {
+              archivo.id_drive;
+              await this.facturaArchivoService.deleteData(archivo.id);
+            }
+          }
+          item.patchValue({
+            aprobado: false,
+            pagado: false,
+            activo: false
+          });
+
+          let result = await this.facturaService.putData(item.value.id, item.value);
           if (result.status === 200) {
+            this._modalRef?.hide();
             const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true, didOpen: (toast) => { toast.addEventListener('mouseenter', Swal.stopTimer); toast.addEventListener('mouseleave', Swal.resumeTimer); } });
             Toast.fire({ icon: 'success', title: 'Borrado Correcto' });
             await this.searchData();

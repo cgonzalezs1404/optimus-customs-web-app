@@ -14,12 +14,12 @@ export class FacturaArchivoService {
     private http: HttpClient
     , private userSession: service.SessionService) { }
 
-  public async getData(filter: string): Promise<any> {
+  public async getData(filter: any): Promise<any> {
     const url = `${this._env.app.api}/${this._env.app.route.factura_archivo}${filter}`;
     return await lastValueFrom(this.http.get(url, { observe: 'response' }).pipe(map((resp: any) => { return resp; })));
   }
 
-  public async getDataById(id: string): Promise<any> {
+  public async getDataById(id: any): Promise<any> {
     const url = `${this._env.app.api}/${this._env.app.route.factura_archivo}/${id}`;
     return await lastValueFrom(this.http.get(url, { observe: 'response' }).pipe(map((resp: any) => { return resp; })));
   }
@@ -29,12 +29,12 @@ export class FacturaArchivoService {
     return await lastValueFrom(this.http.post(url, payload, { observe: 'response', reportProgress: true }).pipe(map((resp: any) => { return resp; })));
   }
 
-  public async putData(id: string, payload: any): Promise<any> {
+  public async putData(id: any, payload: any): Promise<any> {
     const url = `${this._env.app.api}${this._env.app.route.factura_archivo}/${id}`;
     return await lastValueFrom(this.http.put(url, payload, { headers: new HttpHeaders().set('content-type', 'multipart/form-data'), observe: 'response', reportProgress: true }).pipe(map((resp: any) => { return resp; })));
   }
 
-  public async deleteData(id: string): Promise<any> {
+  public async deleteData(id: any): Promise<any> {
     const url = `${this._env.app.api}/${this._env.app.route.factura_archivo}/${id}`;
     return await lastValueFrom(this.http.delete(url, { observe: 'response' }).pipe(map((resp: any) => { return resp; })));
   }
