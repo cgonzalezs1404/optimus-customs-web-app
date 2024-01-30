@@ -59,9 +59,12 @@ export class FacturaPendienteComponent implements OnInit {
     private builder: FormBuilder,
     private router: Router,
     private facturaService: service.FacturaService,
+    private facturaArchivoService: service.FacturaArchivoService,
     private estadoService: service.EstadoService,
     private operacionService: service.OperacionService,
-    private session: service.SessionService) {
+    private session: service.SessionService,
+    public fileService: service.FileService,
+    ) {
     moment.locale("es");
   }
   async ngOnInit(): Promise<void> {
@@ -134,7 +137,9 @@ export class FacturaPendienteComponent implements OnInit {
       fecha_creacion: [null],
       actualizado_por: [null],
       fecha_actualizacion: [null],
-      activo: true
+      activo: true,
+      archivo_xml: [null],
+      archivo_pdf: [null],
     });
   }
 
@@ -160,6 +165,17 @@ export class FacturaPendienteComponent implements OnInit {
     this.isReject = false;
     this.isUpdate = true;
     this._form.reset();
+    var response = await this.facturaArchivoService.getData(`?page_size=9999&activo=true&id_factura=${item.id}&`);
+    if (response.status === 200) {
+      for (let file of response.body.data) {
+        if (file.nombre.includes('.xml')) {
+          item.archivo_xml = file;
+        }
+        else if (file.nombre.includes('.pdf')) {
+          item.archivo_pdf = file;
+        }
+      }
+    }
     this._form.patchValue(item);
     this._form.controls.comentarios.setValidators(null);
     this._form.controls.comentarios.updateValueAndValidity();

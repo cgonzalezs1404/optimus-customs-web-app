@@ -13,8 +13,9 @@
                             <div class="row form-group">
                                 <div class="col-sm-3">
                                     <label for="exampleInputPassword1">Código</label>
-                                    <input type="text" class="form-control" formControlName="codigo" placeholder="Ingrese">
-                                  </div>
+                                    <input type="text" class="form-control" formControlName="codigo"
+                                        placeholder="Ingrese">
+                                </div>
                                 <div class="col-sm-3">
                                     <label for="exampleInputPassword1">Operación</label>
                                     <ng-select placeholder="Select..." [items]="operacionSelect" bindLabel="text"
@@ -80,7 +81,7 @@
                                     <ng-select placeholder="Select..." [items]="aprobadoSelect" bindLabel="text"
                                         bindValue="value" [clearable]="true" formControlName="aprobado" />
                                 </div>
-                                
+
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-3 text-center">
@@ -272,9 +273,39 @@
                 </div>
             </div>
 
-        </div>
+            <div class="col-sm-12">
+                <label>Archivos Adjuntos</label>
+                <ul *ngIf="_form.value.archivo_xml == null && _form.value.archivo_pdf == null" class="list-group">
+                    <li class="list-group-item text-center">
+                        <h3>Sin Datos</h3>
+                    </li>
+                </ul>
+                <div class="list-group">
+                    <div *ngIf="_form.value.archivo_xml != null" class="list-group-item flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-center">
+                            <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
+                                (click)="fileService.openFile(_form.value.archivo_xml.url)">
+                                <a>
+                                    <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_xml.nombre)"
+                                        width="30px" height="30px" alt="file-list"
+                                        onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_xml.nombre}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="_form.value.archivo_pdf != null" class="list-group-item flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-center">
+                            <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
+                                (click)="fileService.openFile(_form.value.archivo_pdf.url)">
+                                <a>
+                                    <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_pdf.nombre)"
+                                        width="30px" height="30px" alt="file-list"
+                                        onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_pdf.nombre}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="modal-body">
             <div class="form-group row">
                 <div class="col-sm-12">
                     <label class="">Comentarios</label>
@@ -283,6 +314,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()"><span
                     class="fa fa-times mr-2"></span>Cancelar</button>

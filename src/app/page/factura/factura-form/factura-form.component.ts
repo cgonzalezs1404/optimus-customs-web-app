@@ -39,7 +39,8 @@ export class FacturaFormComponent implements OnInit {
     private operacionService: service.OperacionService,
     private facturaService: service.FacturaService,
     private facturaArchivoService: service.FacturaArchivoService,
-    private estadoService: service.EstadoService) {
+    private estadoService: service.EstadoService,
+    public fileService: service.FileService) {
 
   }
   async ngOnInit(): Promise<void> {
@@ -131,8 +132,8 @@ export class FacturaFormComponent implements OnInit {
     if (file.type === 'text/xml') {
 
 
-      const fileDataStr = await this.readFileAsync(file);
-      const xmlString = await this.readXmlAsync(file);
+      const fileDataStr = await this.fileService.readFileAsync(file);
+      const xmlString = await this.fileService.readXmlAsync(file);
 
       var xmlData = new DOMParser().parseFromString(xmlString, 'text/xml');
       const emisorRazonSocial = xmlData.getElementsByTagName('cfdi:Emisor')[0].getAttribute('Nombre');
@@ -166,8 +167,8 @@ export class FacturaFormComponent implements OnInit {
         razon_social: emisorRazonSocial,
         precio: total,
         descripcion: conceptos,
-        aprobado: null,
-        pagado: null,
+        aprobado: false,
+        pagado: false,
         fecha_emision: emision,
         fecha_cierre: cierre,
         creado_por: this.session.username,
@@ -182,35 +183,8 @@ export class FacturaFormComponent implements OnInit {
     }
 
     if (file.type === 'application/pdf') {
-      var fileDataStr = await this.readFileAsync(file);
+      var fileDataStr = await this.fileService.readFileAsync(file);
       this.facturas.at(index).patchValue({ archivo_pdf: { name: file.name, url: fileDataStr, file } });
-    }
-  }
-
-  public readXmlAsync(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader: any = new FileReader();
-      reader.onload = () => { resolve(reader.result); };
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
-  }
-
-  public async readFileAsync(file: File) {
-    return new Promise((resolve, reject) => {
-      const reader: any = new FileReader();
-      reader.onload = () => { resolve(reader.result); };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  public openFile(url: string): void {
-    if (url.startsWith('http')) {
-      window.open(url);
-    } else if (url.startsWith('data')) {
-      const pdfWindow = window.open('') || new Window;
-      pdfWindow.document.write('<iframe width="100%" height="100%" src="' + encodeURI(url) + '"></iframe>');
     }
   }
 
@@ -259,15 +233,5 @@ export class FacturaFormComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['/factura'])
     }, 500);
-  }
-
-  public getIconFile(fileName: string): string {
-    const name = fileName.replace(/^.*[\\\/]/, '').toLowerCase();
-    if (name.split('.').pop()?.startsWith('pdf')) {
-      return './assets/dist/img/file-ext/pdf.png';
-    } else if (name.split('.').pop()?.startsWith('xml')) {
-      return './assets/dist/img/file-ext/xml.png';
-    }
-    return './assets/dist/img/file-ext/txt.png';
   }
 }

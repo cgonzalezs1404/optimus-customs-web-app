@@ -99,10 +99,10 @@
                                                                     <div class="d-flex w-100 justify-content-between">
                                                                         <div class="d-flex justify-content-between"
                                                                             style="cursor: pointer; width: 95%;"
-                                                                            (click)="openFile(facturas.at(i).value.archivo_xml.url)">
+                                                                            (click)="fileService.openFile(facturas.at(i).value.archivo_xml.url)">
                                                                             <a>
                                                                                 <img class="mr-2"
-                                                                                    [src]="getIconFile(facturas.at(i).value.archivo_xml.name)"
+                                                                                    [src]="fileService.getIconFile(facturas.at(i).value.archivo_xml.name)"
                                                                                     width="30px" height="30px"
                                                                                     alt="file-list"
                                                                                     onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_xml.name}}</a>
@@ -114,10 +114,10 @@
                                                                     <div class="d-flex w-100 justify-content-between">
                                                                         <div class="d-flex justify-content-between"
                                                                             style="cursor: pointer; width: 95%;"
-                                                                            (click)="openFile(facturas.at(i).value.archivo_pdf.url)">
+                                                                            (click)="fileService.openFile(facturas.at(i).value.archivo_pdf.url)">
                                                                             <a>
                                                                                 <img class="mr-2"
-                                                                                    [src]="getIconFile(facturas.at(i).value.archivo_pdf.name)"
+                                                                                    [src]="fileService.getIconFile(facturas.at(i).value.archivo_pdf.name)"
                                                                                     width="30px" height="30px"
                                                                                     alt="file-list"
                                                                                     onerror="this.src='./assets/image/no-photo.svg'">{{facturas.at(i).value.archivo_pdf.name}}</a>

@@ -25,7 +25,8 @@ export class HeaderInterceptor implements HttpInterceptor {
                 return from(this.getUser()).pipe(switchMap(user => {
                     const headers = req.headers
                         .set('Authorization', `Bearer ${user.token}`)
-                        .set('Accept', 'application/json');
+                        .set('Accept', 'application/json')
+                        .set('Authentication', `${user.refresh_token}`);
                     const httpRequestClone = req.clone({ headers });
                     return next.handle(httpRequestClone);
                 }));
@@ -33,7 +34,8 @@ export class HeaderInterceptor implements HttpInterceptor {
                 return from(this.getUser()).pipe(switchMap(user => {
                     const headers = req.headers
                         .set('Authorization', `Bearer ${user.token}`)
-                        .set('Content-Type', 'application/json');
+                        .set('Content-Type', 'application/json')
+                        .set('Authentication', `${user.refresh_token}`);
                     const httpRequestClone = req.clone({ headers });
                     return next.handle(httpRequestClone);
                 }));

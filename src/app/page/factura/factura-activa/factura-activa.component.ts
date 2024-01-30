@@ -60,7 +60,9 @@ export class FacturaActivaComponent {
     private facturaArchivoService: service.FacturaArchivoService,
     private estadoService: service.EstadoService,
     private operacionService: service.OperacionService,
-    private session: service.SessionService) {
+    private session: service.SessionService,
+    public fileService: service.FileService,
+    ) {
     moment.locale("es");
   }
   async ngOnInit(): Promise<void> {
@@ -82,7 +84,7 @@ export class FacturaActivaComponent {
       this.estadoSelect.push({ value: element.id, text: element.nombre });
     });
 
-    response = await this.operacionService.getData('?page_size=9999&activo=true&finalizado=false').then((resp) => resp);
+    response = await this.operacionService.getData('?page_size=9999&activo=true').then((resp) => resp);
     let operacionList = response.body.data;
 
     operacionList.forEach((element: any) => {
@@ -133,7 +135,9 @@ export class FacturaActivaComponent {
       fecha_creacion: [null],
       actualizado_por: [null],
       fecha_actualizacion: [null],
-      activo: true
+      activo: true,
+      archivo_xml: [null],
+      archivo_pdf: [null],
     });
   }
 
@@ -148,7 +152,6 @@ export class FacturaActivaComponent {
     var result = await this.facturaService.getData(urlFilters);
     if (result.status === 200) {
       this._dtData = result.body;
-      console.log(this._dtData);
     }
   }
 
@@ -162,6 +165,17 @@ export class FacturaActivaComponent {
     this.isUpdate = true;
     this._form.disable();
     this._form.reset();
+    var response = await this.facturaArchivoService.getData(`?page_size=9999&activo=true&id_factura=${item.id}&`);
+    if (response.status === 200) {
+      for (let file of response.body.data) {
+        if (file.nombre.includes('.xml')) {
+          item.archivo_xml = file;
+        }
+        else if (file.nombre.includes('.pdf')) {
+          item.archivo_pdf = file;
+        }
+      }
+    }
     this._form.patchValue(item);
     this._form.controls.comentarios.setValidators(null);
     this._form.controls.comentarios.updateValueAndValidity();

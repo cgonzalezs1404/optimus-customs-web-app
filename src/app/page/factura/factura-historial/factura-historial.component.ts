@@ -27,7 +27,7 @@ export class FacturaHistorialComponent {
 
   public operacionSelect: any[] = [];
   public estadoSelect: any[] = [];
-  public aprobadoSelect: any[] = [{value: true, text: 'SI'}, {value: false, text: 'NO'}]
+  public aprobadoSelect: any[] = [{ value: true, text: 'SI' }, { value: false, text: 'NO' }]
 
   public isUpdate: boolean = false;
   public formSubmitted: boolean = false;
@@ -60,7 +60,8 @@ export class FacturaHistorialComponent {
     private facturaArchivoService: service.FacturaArchivoService,
     private estadoService: service.EstadoService,
     private operacionService: service.OperacionService,
-    private session: service.SessionService) {
+    private session: service.SessionService,
+    public fileService: service.FileService) {
     moment.locale("es");
   }
   async ngOnInit(): Promise<void> {
@@ -134,7 +135,9 @@ export class FacturaHistorialComponent {
       fecha_creacion: [null],
       actualizado_por: [null],
       fecha_actualizacion: [null],
-      activo: true
+      activo: true,
+      archivo_xml: [null],
+      archivo_pdf: [null],
     });
   }
 
@@ -142,12 +145,11 @@ export class FacturaHistorialComponent {
     let urlFilters: string = '';
     urlFilters += `?page_number=${(this._dtData.metadata.currentPage !== 0) ? this._dtData.metadata.currentPage : 1}`
     urlFilters += `&page_size=${(this._dtData.metadata.pageSize !== 0) ? this._dtData.metadata.pageSize : 10}`;
-    //urlFilters += `&pagado=${(this._searchForm.value['aprobado'] !== null) ? `${this._searchForm.value['aprobado']}` : true}`
-    
+
     for (var key in this._searchForm.value) {
       urlFilters += this._searchForm.value[key] !== null ? `&${key}=${this._searchForm.value[key]}` : '';
     }
-    console.log(urlFilters);
+
     var result = await this.facturaService.getData(urlFilters);
     if (result.status === 200) {
       this._dtData = result.body;
@@ -163,7 +165,19 @@ export class FacturaHistorialComponent {
     this.isUpdate = true;
     this._form.disable();
     this._form.reset();
+    var response = await this.facturaArchivoService.getData(`?page_size=9999&activo=true&id_factura=${item.id}&`);
+    if (response.status === 200) {
+      for (let file of response.body.data) {
+        if (file.nombre.includes('.xml')) {
+          item.archivo_xml = file;
+        }
+        else if (file.nombre.includes('.pdf')) {
+          item.archivo_pdf = file;
+        }
+      }
+    }
     this._form.patchValue(item);
+
     this.modalShow(this._modalView);
   }
 

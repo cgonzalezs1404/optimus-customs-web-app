@@ -256,6 +256,39 @@
         </div>
       </div>
 
+      <div class="col-sm-12">
+        <label>Archivos Adjuntos</label>
+        <ul *ngIf="_form.value.archivo_xml == null && _form.value.archivo_pdf == null" class="list-group">
+            <li class="list-group-item text-center">
+                <h3>Sin Datos</h3>
+            </li>
+        </ul>
+        <div class="list-group">
+            <div *ngIf="_form.value.archivo_xml != null" class="list-group-item flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-center">
+                    <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
+                        (click)="fileService.openFile(_form.value.archivo_xml.url)">
+                        <a>
+                            <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_xml.nombre)"
+                                width="30px" height="30px" alt="file-list"
+                                onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_xml.nombre}}</a>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="_form.value.archivo_pdf != null" class="list-group-item flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-center">
+                    <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
+                        (click)="fileService.openFile(_form.value.archivo_pdf.url)">
+                        <a>
+                            <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_pdf.nombre)"
+                                width="30px" height="30px" alt="file-list"
+                                onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_pdf.nombre}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     </div>
 
     <div *ngIf="isReject" class="modal-body">

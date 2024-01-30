@@ -12,7 +12,16 @@ import { CommonModule } from '@angular/common';
     providers: [
         service.LoadingService,
         service.UsuarioTokenService,
-        service.SessionService
+        service.SessionService,
+
+        service.ConsumidorService,
+        service.EstadoService,
+        service.GiroService,
+        service.OperacionService,
+        service.FacturaService,
+        service.FacturaArchivoService,
+
+        service.FileService
     ],
     exports: []
 }) export class ServiceModule { }

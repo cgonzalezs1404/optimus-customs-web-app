@@ -18,7 +18,7 @@ import { RenewTokenInterceptor } from './renew-token.interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HeaderInterceptor, multi: true },
-    //{ provide: HTTP_INTERCEPTORS, useClass: RenewTokenInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: RenewTokenInterceptor, multi: true }
   ]
 })
 export class InterceptorModule { }

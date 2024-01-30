@@ -10,3 +10,5 @@ export { GiroService } from "./giro.service";
 export { OperacionService } from './operacion.service';
 export { FacturaService } from './factura.service';
 export { FacturaArchivoService } from './factura-archivo.service';
+
+export {FileService} from './file.service';

@@ -51,7 +51,6 @@ export class LoginComponent implements OnInit {
 
     var result = await this.usuarioTokenService.login(payload).then((response) => response).catch((error) => error);
     if (result.status === 200) {
-      console.log(result.body);
       this.sessionService.setStorageData(result.body);
       this.router.navigateByUrl('/home')
     }
