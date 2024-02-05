@@ -4,6 +4,7 @@ import * as service from '../../../shared/service/service.index';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-factura-form',
@@ -19,8 +20,12 @@ export class FacturaFormComponent implements OnInit {
 
   public isOpSelected: boolean = false;
   public formSubmitted: boolean = false;
+  public isFileValid: boolean = false;
+
+  public facturasValidas: boolean[] = [];
 
   public session: any;
+  public paramsData: any = {};
 
   public flatPickerOpt = {
     placeholder: 'dd/mm/yyyy',
@@ -34,6 +39,7 @@ export class FacturaFormComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private builder: FormBuilder,
     private sessionService: service.SessionService,
     private operacionService: service.OperacionService,
@@ -41,16 +47,52 @@ export class FacturaFormComponent implements OnInit {
     private facturaArchivoService: service.FacturaArchivoService,
     private estadoService: service.EstadoService,
     public fileService: service.FileService) {
-
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation()?.extras.state) {
+        this.paramsData = this.router.getCurrentNavigation()?.extras.state?.['data'];
+      }
+    });
   }
   async ngOnInit(): Promise<void> {
     this.initForms();
     await this.createList();
     this.session = await this.sessionService.getStorageData();
+
+    if (this.paramsData && JSON.stringify(this.paramsData) !== '{}') {
+      console.log(this.paramsData);
+      this._form.disable();
+      this._form.patchValue({ id_operacion: this.paramsData.id_operacion });
+      var result = await this.facturaService.getData(`?page_size=9999&activo=true&id_operacion=${this.paramsData.id_operacion}`);
+      if (result.status === 200) {
+        var facturas = result.body.data;
+        let idx: number = 0;
+        for (var f of facturas) {
+          var filesResult = await this.facturaArchivoService.getData(`?page_size=9999&activo=true&id_factura=${f.id}`);
+          if (filesResult.status === 200) {
+            var docs = filesResult.body.data;
+            for (let doc of docs) {
+              if (doc.nombre.includes('.xml')) {
+                f.archivo_xml = { name: doc.nombre, url: doc.url };
+              }
+              else if (doc.nombre.includes('.pdf')) {
+                f.archivo_pdf = { name: doc.nombre, url: doc.url };
+              }
+            }
+          }
+          this.addFactura();
+          this.facturas.at(idx).patchValue(f);
+          this.facturas.disable();
+          idx++;
+        }
+      }
+    }
   }
 
   private async createList() {
-    let response = await this.operacionService.getData('?page_size=9999&activo=true&finalizado=false').then((resp) => resp);
+    let filters: string = '';
+    if (this.paramsData && this.paramsData.type === 'view') { filters = '?page_size=9999&activo=true&finalizado=true' }
+    if (this.paramsData && this.paramsData.type !== 'view') { filters = '?page_size=9999&activo=true&finalizado=false' }
+    let response = await this.operacionService.getData(filters).then((resp) => resp);
     let operacionList = response.body.data;
 
     operacionList.forEach((element: any) => {
@@ -101,7 +143,8 @@ export class FacturaFormComponent implements OnInit {
       fecha_actualizacion: [null],
       activo: [null],
       archivo_xml: [null],
-      archivo_pdf: [null]
+      archivo_pdf: [null],
+      mensaje: [null]
     });
 
     this.facturas.push(facturaForm);
@@ -195,6 +238,10 @@ export class FacturaFormComponent implements OnInit {
       return;
     }
 
+    if (await this.invalidFiles()) {
+      return;
+    }
+
     for (let factura of this.facturas.value) {
       var result = await this.facturaService.postData(factura);
       if (result.status === 200) {
@@ -233,5 +280,46 @@ export class FacturaFormComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['/factura'])
     }, 500);
+  }
+
+  public async cancelForm() {
+    this.router.navigate(['/factura']);
+  }
+
+  public async invalidFiles(): Promise<boolean> {
+    let mensaje: string = '';
+    this.facturasValidas = [];
+    for (let idx = 0; idx < this.facturas.length; idx++) {
+      if (this.facturas.at(idx).value.archivo_xml === null && this.facturas.at(idx).value.archivo_pdf === null) {
+        mensaje = 'No se han seleccionado archivos';
+        this.facturas.at(idx).patchValue({ mensaje });
+        this.facturasValidas.push(false);
+        continue;
+      }
+      if (this.facturas.at(idx).value.archivo_xml === null) {
+        mensaje = 'No se ha seleccionado archivo xml';
+        this.facturas.at(idx).patchValue({ mensaje });
+        this.facturasValidas.push(false);
+        continue;
+      }
+      if (this.facturas.at(idx).value.archivo_pdf === null) {
+        mensaje = 'No se ha seleccionado archivo pdf';
+        this.facturas.at(idx).patchValue({ mensaje });
+        this.facturasValidas.push(false);
+        continue;
+      }
+      var xmlFileName = this.facturas.at(idx).value.archivo_xml.name.substring(0, this.facturas.at(idx).value.archivo_xml.name.indexOf('.'));
+      var pdfFileName = this.facturas.at(idx).value.archivo_pdf.name.substring(0, this.facturas.at(idx).value.archivo_pdf.name.indexOf('.'));
+      if (xmlFileName !== pdfFileName) {
+        mensaje = 'El nombre de los archivos no coincide';
+        this.facturas.at(idx).patchValue({ mensaje });
+        this.facturasValidas.push(false);
+        continue;
+      }
+      mensaje = '';
+      this.facturasValidas.push(true);
+      this.facturas.at(idx).patchValue({ mensaje });
+    }
+    return (this.facturasValidas.includes(false));
   }
 }

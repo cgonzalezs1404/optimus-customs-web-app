@@ -1,5 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 ng-select.is-invalid .ng-select-container {
-    border-color: #dc3545;
-  }
+  border-color: #dc3545;
+}
+
+.custom-invalid-feedback {
+  color: #dc3545;
+  width: 100%;
+  font-size: 80%;
+  margin-top: 0.25rem;
+}

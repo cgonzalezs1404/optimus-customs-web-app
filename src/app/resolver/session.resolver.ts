@@ -23,43 +23,15 @@ export class SessionResolver implements Resolve<any> {
     public async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
 
         var session = await this.storageServ.getStorageData();
-        if(!session){
+        if (JSON.stringify(session) === '{}') {
+            this.storageServ.clearSession();
             this.router.navigate([this._env.app.login.route]);
         }
-
-        if(new Date(session.expiration_date) < new Date()){
+        if (!session) {
             this.router.navigate([this._env.app.login.route]);
         }
-        // return await this.storageServ.getStorageData()
-        //     .then((resp) => {
-        //         if (!resp) {
-        //             
-        //         }
-        //         if (new Date(resp.expiration_date) < new Date()) {
-        //             this.router.navigate([this._env.app.login.route]);
-        //         }
-        //     })
-        //     .catch(((error) => {
-        //         this.router.navigate([this._env.app.login.route]);
-        //         return EMPTY;
-        //     }));
-        // return await this.authServ.session(`?id_usuario=1&activo=1`)
-        //     .then((resp) => {
-
-        //         if (resp.status !== 200) {
-        //             this.router.navigate([this._env.app.login.route]);
-        //         }
-        //         if (!resp.body) {
-        //             this.router.navigate([this._env.app.login.route]);
-        //         }
-        //         if(new Date(resp.body.expiration_date) < new Date()){
-        //             this.router.navigate([this._env.app.login.route]);
-        //         }
-
-        //     }).catch((error) => {
-        //         this.router.navigate([this._env.app.login.route]);
-        //         return EMPTY;
-        //     });
-
+        if (new Date(session.expiration_date) < new Date()) {
+            this.router.navigate([this._env.app.login.route]);
+        }
     }
 }

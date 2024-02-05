@@ -101,6 +101,7 @@ export class OperacionActivaComponent implements OnInit {
       codigo: [null],
       fecha_inicio: [null],
       fecha_fin: [null],
+      finalizado: [false],
       activo: [true],
       descendente: [true]
     });
@@ -113,6 +114,7 @@ export class OperacionActivaComponent implements OnInit {
       codigo: [null],
       fecha_inicio: [null],
       fecha_fin: [null],
+      finalizado: [false],
       creado_por: [null],
       fecha_creacion: [null],
       actualizado_por: [null],
@@ -126,7 +128,7 @@ export class OperacionActivaComponent implements OnInit {
     urlFilters += `?page_number=${(this._dtData.metadata.currentPage !== 0) ? this._dtData.metadata.currentPage : 1}`
     urlFilters += `&page_size=${(this._dtData.metadata.pageSize !== 0) ? this._dtData.metadata.pageSize : 10}`
     for (var key in this._searchForm.value) {
-      urlFilters += this._searchForm.value[key] ? `&${key}=${this._searchForm.value[key]}` : '';
+      urlFilters += this._searchForm.value[key] !== null ? `&${key}=${this._searchForm.value[key]}` : '';
     }
     var result = await this.operacionService.getData(urlFilters);
     if (result.status === 200) {

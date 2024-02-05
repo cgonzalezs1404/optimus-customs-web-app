@@ -72,7 +72,8 @@
               <!-- /.card-body -->
   
               <div class="card-footer clearfix">
-                <button type="submit" class="btn btn-primary"><span class="fa fa-search"></span>Buscar</button>
+                <button type="submit" class="btn btn-primary mr-2"><span class="fa fa-search mr-2"></span>Buscar</button>
+                <button class="btn btn-warning" (click)="initCreateForm()"><span class="fa fa-plus"></span>Agregar</button>
               </div>
             </form>
           </div>
@@ -92,13 +93,7 @@
               <div class="row justify-content-between align-items-center">
                 <div class="col-sm-1">
                   <h3 class="card-title">Información</h3>
-                </div>
-                <div class="text-end">
-                  <button class="btn btn-warning btn-sm" (click)="initCreateForm()">
-                    <span class="fa fa-plus"></span>Agregar</button>
-                </div>
-  
-  
+                </div>  
               </div>
   
             </div>

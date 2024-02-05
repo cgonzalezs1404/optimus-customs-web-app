@@ -52,13 +52,13 @@
                                                         <div class="col-sm-9">
                                                             <h4>Nueva Factura</h4>
                                                         </div>
-                                                        <div class="text-end">
+                                                        <div *ngIf="this.paramsData.type!=='view'" class="text-end">
                                                             <button class="btn btn-danger" (click)="deleteFactura(i)">
                                                                 <i class="fa fa-minus"></i></button>
                                                         </div>
                                                     </div>
                                                     <div class="row form-group mb-5 justify-content-center">
-                                                        <div class="col-sm-3">
+                                                        <div *ngIf="this.paramsData.type!=='view'" class="col-sm-3">
 
                                                             <div class="row form-group">
                                                                 <div class="col-sm-6">
@@ -124,14 +124,12 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="text-center custom-invalid-feedback">
+                                                                    {{facturas.at(i).value.mensaje}}</div>
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="row form-group">
-                                                        <button class="btn btn-success"><i
-                                                                class="fa fa-check-square-o mr-2"></i> Validar</button>
-                                                    </div>
                                                     <form [formGroup]="factura">
                                                         <div class="row form-group">
                                                             <!-- <div class="col-sm-3">
@@ -164,7 +162,7 @@
                                                         </div>
 
                                                         <div class="row form-group">
-                                                            
+
                                                             <div class="col-sm-3">
                                                                 <label>Razón Social</label>
                                                                 <input class="form-control" type="text"
@@ -203,11 +201,12 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-sm-12">
-                                                              <label class="">Descripción</label>
-                                                              <textarea type="text" class="form-control" formControlName="descripcion" [rows]="5"
-                                                                style="resize: none;"></textarea>
+                                                                <label class="">Descripción</label>
+                                                                <textarea type="text" class="form-control"
+                                                                    formControlName="descripcion" [rows]="5"
+                                                                    style="resize: none;"></textarea>
                                                             </div>
-                                                          </div>
+                                                        </div>
                                                     </form>
 
 
@@ -220,9 +219,9 @@
 
                             </div>
                             <div class="card-footer">
-                                <button *ngIf="isOpSelected" type="submit" class="btn btn-primary mr-2"><i
+                                <button *ngIf="this.paramsData.type!=='view' && isOpSelected && facturas.length > 0" type="submit" class="btn btn-primary mr-2"><i
                                         class="fa fa-save mr-2"></i>Guardar</button>
-                                <button type="button" class="btn btn-danger"><i
+                                <button type="button" class="btn btn-danger" (click)="cancelForm()"><i
                                         class="fa fa-times mr-2"></i>Cancelar</button>
                             </div>
                         </form>
