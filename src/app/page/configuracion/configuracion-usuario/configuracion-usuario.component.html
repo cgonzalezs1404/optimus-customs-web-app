@@ -1,0 +1,191 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Búsqueda</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form [formGroup]="_searchForm" (ngSubmit)="searchData()">
+                        <div class="card-body">
+
+                            <div class="row form-group">
+                                <div class="col-sm-3">
+                                    <label>Nombre(s)</label>
+                                    <input type="text" class="form-control" formControlName="nombres"
+                                        placeholder="Ingrese">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Apellido Paterno</label>
+                                    <input type="text" class="form-control" formControlName="apellido_paterno"
+                                        placeholder="Ingrese">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Apellido Materno</label>
+                                    <input type="text" class="form-control" formControlName="apellido_materno"
+                                        placeholder="Ingrese">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Correo Electrónico</label>
+                                    <input type="text" class="form-control" formControlName="correo_electronico"
+                                        placeholder="Ingrese">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 text-center">
+                                <label class="control-label" style="color: transparent;">-</label>
+                                <div class="form-check">
+                                    <div class="icheck-primary">
+                                        <input type="checkbox" id="checkboxPrimary1" formControlName="page_descending">
+                                        <label for="checkboxPrimary1">Descendiente</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer clearfix">
+                            <button type="submit" class="btn btn-primary mr-2"><span
+                                    class="fa fa-search mr-2"></span>Buscar</button>
+                            <button type="button" class="btn btn-warning" (click)="initCreateForm()"><span
+                                    class="fa fa-plus mr-2"></span>Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+
+                    <div class="card-header">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-sm-1">
+                                <h3 class="card-title">Información</h3>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead style="background-color: #eee!important">
+                                    <tr #tableHeaderHead>
+                                        <th class="text-center">Nombres(s)</th>
+                                        <th class="text-center">Apellido Paterno</th>
+                                        <th class="text-center">Apellido Materno</th>
+                                        <th class="text-center">Correo Electrónico</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-template [ngIf]="(_dtData.data.length === 0)" [ngIfElse]="tableBody">
+                                        <td [attr.colspan]="_dataObjectLength" class="text-center">
+                                            <span>Sin Datos</span>
+                                        </td>
+                                    </ng-template>
+
+                                    <ng-template #tableBody>
+                                        <tr *ngFor="let item of _dtData.data">
+                                            <td>{{item.nombres}}</td>
+                                            <td>{{item.apellido_paterno}}</td>
+                                            <td>{{item.apellido_materno}}</td>
+                                            <td>{{item.correo_electronico}}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-warning mr-2 btn-sm"
+                                                    (click)="initEditForm(item)"><span class="fa fa-eye"></span>
+                                                    Ver</button>
+                                                <button class="btn btn-danger mr-2 btn-sm"
+                                                    (click)="initDeleteForm(item)"><span class="fa fa-times"></span>
+                                                    Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer clearfix" *ngIf="_dtData.metadata && _dtData.metadata.totalCount > 0">
+                        <div class="row">
+                            <div class="col-md-auto">
+                                <select class="custom-select" [ngModel]="_dtData.metadata.pageSize"
+                                    (ngModelChange)="onChangeDataLength($event)">
+                                    <option *ngFor="let item of _dataPageLength">{{item}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-auto">
+                                <pagination [boundaryLinks]="true" [itemsPerPage]="_dtData.metadata.pageSize"
+                                    [totalItems]="_dtData.metadata.totalCount"
+                                    [(ngModel)]="_dtData.metadata.currentPage" [maxSize]="5" previousText="&lsaquo;"
+                                    nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                                    (pageChanged)="pageChanged($event)"></pagination>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<ng-template #modalView>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Nuevo</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="_modalRef?.hide()">
+            <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+    </div>
+    <form [formGroup]="_form" (ngSubmit)="submitForm()">
+        <div class="modal-body">
+
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label class="">Nombres</label>
+                    <input type="text" class="form-control" formControlName="nombres"
+                        [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.nombres.errors }">
+                    <div *ngIf="_form.controls.nombres.errors" class="invalid-feedback">Campo vacio</div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="">Apellido Paterno</label>
+                    <input type="text" class="form-control" formControlName="apellido_paterno"
+                        [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.apellido_paterno.errors }">
+                    <div *ngIf="_form.controls.apellido_paterno.errors" class="invalid-feedback">Campo vacio</div>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label class="">Apellido Materno</label>
+                    <input type="text" class="form-control" formControlName="apellido_materno"
+                        [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.apellido_materno.errors }">
+                    <div *ngIf="_form.controls.apellido_materno.errors" class="invalid-feedback">Campo vacio</div>
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="">Correo Electrónico</label>
+                    <input type="text" class="form-control" formControlName="correo_electronico"
+                        [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.correo_electronico.errors }">
+                    <div *ngIf="_form.controls.correo_electronico.errors" class="invalid-feedback">Campo vacio</div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Aceptar</button>
+            <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()">Cancelar</button>
+        </div>
+    </form>
+
+</ng-template>

@@ -43,7 +43,6 @@ export class OperacionHistorialComponent {
 
   constructor(
     private modalService: BsModalService,
-    private loadingService: NgxSpinnerService,
     private giroService: service.GiroService,
     private estadoService: service.EstadoService,
     private consumidorService: service.ConsumidorService,
@@ -56,12 +55,9 @@ export class OperacionHistorialComponent {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.loadingService.show();
     this.initForms();
     this.session = await this.sessionService.getStorageData();
     await this.createList();
-
-    this.loadingService.hide();
   }
 
   public async ngAfterViewInit(): Promise<void> {

@@ -14,7 +14,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     PageComponent
   ],
   providers: [
-    provideClientHydration()
   ],
   imports: [
     APP_ROUTES,

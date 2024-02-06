@@ -18,6 +18,13 @@ import { FacturaPendienteComponent } from './factura/factura-pendiente/factura-p
 import { FacturaHistorialComponent } from './factura/factura-historial/factura-historial.component';
 import { OperacionActivaComponent } from "./operacion/operacion-activa/operacion-activa.component";
 import { OperacionHistorialComponent } from "./operacion/operacion-historial/operacion-historial.component";
+import { ConfiguracionComponent } from "./configuracion/configuracion.component";
+import { ConfiguracionUsuarioComponent } from './configuracion/configuracion-usuario/configuracion-usuario.component';
+import { ConfiguracionPrivilegioComponent } from './configuracion/configuracion-privilegio/configuracion-privilegio.component';
+import { ConfiguracionUsuarioPrivilegioComponent } from './configuracion/configuracion-usuario-privilegio/configuracion-usuario-privilegio.component';
+import { ConfiguracionMenuPrivilegioComponent } from "./configuracion/configuracion-menu-privilegio/configuracion-menu-privilegio.component";
+import { ConfiguracionMenuComponent } from './configuracion/configuracion-menu/configuracion-menu.component';
+import { CatalogoComponent } from './catalogo/catalogo.component';
 
 @NgModule({
 
@@ -30,7 +37,14 @@ import { OperacionHistorialComponent } from "./operacion/operacion-historial/ope
         FacturaHistorialComponent,
         OperacionComponent,
         OperacionActivaComponent,
-        OperacionHistorialComponent
+        OperacionHistorialComponent,
+        ConfiguracionComponent,
+        ConfiguracionUsuarioComponent,
+        ConfiguracionPrivilegioComponent,
+        ConfiguracionUsuarioPrivilegioComponent,
+        ConfiguracionMenuPrivilegioComponent,
+        ConfiguracionMenuComponent,
+        CatalogoComponent,
         
     ],
     imports: [

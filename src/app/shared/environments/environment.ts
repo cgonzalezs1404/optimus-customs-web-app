@@ -24,7 +24,9 @@ export const environment = {
             usuario_token_login: '/api/usuario_token/login',
             usuario_token_refresh: '/api/usuario_token/refresh',
             usuario_token_session: 'api/usuario_token/session',
-            usuario_x_privilegio: '/api/usuario_privilegio'
+            usuario_x_privilegio: '/api/usuario_privilegio',
+            menu_x_privilegio: '/api/menu_privilegio',
+            menu: '/api/menu'
         },
         login:{
             name:'login',

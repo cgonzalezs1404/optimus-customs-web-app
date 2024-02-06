@@ -1,0 +1,38 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Configuración</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Configuración</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+  
+  <div>
+    <tabset>
+      <tab heading="Usuarios" id="tab1">
+        <app-configuracion-usuario></app-configuracion-usuario>
+      </tab>
+      <tab heading="Privilegios" id="tab2">
+        <app-configuracion-privilegio></app-configuracion-privilegio>
+      </tab>
+      <tab heading="Menús" id="tab3">
+        <app-configuracion-menu></app-configuracion-menu>
+      </tab>
+      <tab heading="Privilegios de Usuario" id="tab4">
+        <app-configuracion-usuario-privilegio></app-configuracion-usuario-privilegio>
+      </tab>
+      <tab heading="Privilegios de Menú" id="tab5">
+        <app-configuracion-menu-privilegio></app-configuracion-menu-privilegio>
+      </tab>
+      
+    </tabset>
+  </div>
