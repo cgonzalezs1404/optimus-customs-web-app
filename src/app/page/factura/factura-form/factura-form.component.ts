@@ -99,7 +99,7 @@ export class FacturaFormComponent implements OnInit {
       this.operacionSelect.push({ value: element.id, text: element.codigo });
     });
 
-    response = await this.estadoService.get('').then((resp) => resp);
+    response = await this.estadoService.getData('?page_size=9999&activo=true').then((resp) => resp);
     let estadoList = response.body.data;
 
     estadoList.forEach((element: any) => {

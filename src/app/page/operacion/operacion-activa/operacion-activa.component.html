@@ -1,213 +1,219 @@
- 
-  <section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">Búsqueda</h3>
-            </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form [formGroup]="_searchForm" (ngSubmit)="searchData()">
-              <div class="card-body">
-  
-                <div class="row">
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Código</label>
-                      <input type="text" class="form-control" formControlName="codigo" placeholder="Ingrese">
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Giro</label>
-                      <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value"
-                        [clearable]="true" formControlName="id_giro" />
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Estado</label>
-                      <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
-                        [clearable]="true" formControlName="id_estado" />
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Consumidor</label>
-                      <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
-                        [clearable]="true" formControlName="id_consumidor" />
-                    </div>
-                  </div>
-                </div>
-  
-                <div class="row">
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Fecha Inicio</label>
-                      <input type="date" class="form-control" formControlName="fecha_inicio">
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Fecha Fin</label>
-                      <input type="date" class="form-control" formControlName="fecha_fin">
-                    </div>
-                  </div>
-  
-                    <div class="col-sm-3 text-center">
-                      <label class="control-label" style="color: transparent;">-</label>
-                      <div class="form-check">
-                        <div class="icheck-primary">
-                          <input type="checkbox" id="checkboxPrimary1" formControlName="descendente">
-                          <label for="checkboxPrimary1">Descendiente</label>
-                        </div>  
-                      </div>
-                    </div>
-  
-                </div>
-  
-              </div>
-              <!-- /.card-body -->
-  
-              <div class="card-footer clearfix">
-                <button type="submit" class="btn btn-primary mr-2"><span class="fa fa-search mr-2"></span>Buscar</button>
-                <button class="btn btn-warning" (click)="initCreateForm()"><span class="fa fa-plus"></span>Agregar</button>
-              </div>
-            </form>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Búsqueda</h3>
           </div>
-        </div>
-  
-      </div>
-    </div>
-  </section>
-  
-  <section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card card-primary">
-  
-            <div class="card-header">
-              <div class="row justify-content-between align-items-center">
-                <div class="col-sm-1">
-                  <h3 class="card-title">Información</h3>
-                </div>  
-              </div>
-  
-            </div>
-  
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form [formGroup]="_searchForm" (ngSubmit)="searchData()">
             <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                  <thead style="background-color: #eee!important">
-                    <tr #tableHeaderHead>
-                      <th class="text-center">Código</th>
-                      <th class="text-center">Giro</th>
-                      <th class="text-center">Estado</th>
-                      <th class="text-center">Consumidor</th>
-                      <th class="text-center">Fecha Inicio</th>
-                      <th class="text-center">Fecha Fin</th>
-                      <th class="text-center">Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-template [ngIf]="(_dtData.data.length === 0)" [ngIfElse]="tableBody">
-                      <td [attr.colspan]="_dataObjectLength" class="text-center">
-                        <span>Sin Datos</span>
-                      </td>
-                    </ng-template>
-  
-                    <ng-template #tableBody>
-                      <tr *ngFor="let item of _dtData.data">
-                        <td>{{item.codigo}}</td>
-                        <td>{{catalogValue('giro',item.id_giro)}}</td>
-                        <td>{{catalogValue('estado',item.id_estado)}}</td>
-                        <td>{{catalogValue('consumidor',item.id_consumidor)}}</td>
-                        <td>{{item.fecha_inicio | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{item.fecha_fin | date: 'dd/MM/yyyy'}}</td>
-                        <td class="text-center">
-                          <button class="btn btn-primary mr-2 btn-sm" (click)="initEditForm(item)"><span
-                              class="fa fa-edit"></span> Editar</button>
-                          <button class="btn btn-danger btn-sm" (click)="initDeleteForm(item)"><span
-                              class="fa fa-times"></span> Eliminar</button>
-                        </td>
-                      </tr>
-                    </ng-template>
-                  </tbody>
-                </table>
-              </div>
-  
-            </div>
-  
-            <div class="card-footer clearfix" *ngIf="_dtData.metadata && _dtData.metadata.totalCount > 0">
+
               <div class="row">
-                <div class="col-md-auto">
-                  <select class="custom-select" [ngModel]="_dtData.metadata.pageSize"
-                    (ngModelChange)="onChangeDataLength($event)">
-                    <option *ngFor="let item of _dataPageLength">{{item}}</option>
-                  </select>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Código</label>
+                    <input type="text" class="form-control" formControlName="codigo" placeholder="Ingrese">
+                  </div>
                 </div>
-                <div class="col-md-auto">
-                  <pagination [boundaryLinks]="true" [itemsPerPage]="_dtData.metadata.pageSize"
-                    [totalItems]="_dtData.metadata.totalCount" [(ngModel)]="_dtData.metadata.currentPage" [maxSize]="5"
-                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
-                    (pageChanged)="pageChanged($event)"></pagination>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Giro</label>
+                    <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value"
+                      [clearable]="true" formControlName="id_giro" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Estado</label>
+                    <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+                      [clearable]="true" formControlName="id_estado" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Consumidor</label>
+                    <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
+                      [clearable]="true" formControlName="id_consumidor" />
+                  </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Fecha Inicio</label>
+                    <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_inicio"
+                      [placeholder]="flatPickerOpt.placeholder" [dateFormat]="flatPickerOpt.dateFormat"
+                      [enableTime]="flatPickerOpt.enableTime" [altFormat]="flatPickerOpt.altFormat"
+                      [altInput]="flatPickerOpt.altInput">
+                  </div>
+                </div>
+                <!-- <div class="col-sm-3">
+                  <div class="form-group">
+                    <label>Fecha Fin</label>
+                    <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_fin"
+                      [placeholder]="flatPickerOpt.placeholder" [dateFormat]="flatPickerOpt.dateFormat"
+                      [enableTime]="flatPickerOpt.enableTime" [altFormat]="flatPickerOpt.altFormat"
+                      [altInput]="flatPickerOpt.altInput">
+                  </div>
+                </div> -->
+
+                <div class="col-sm-3 text-center">
+                  <label class="control-label" style="color: transparent;">-</label>
+                  <div class="form-check">
+                    <div class="icheck-primary">
+                      <input type="checkbox" id="checkboxPrimary1" formControlName="descendente">
+                      <label for="checkboxPrimary1">Descendiente</label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
-  
+            <!-- /.card-body -->
+
+            <div class="card-footer clearfix">
+              <button type="submit" class="btn btn-primary mr-2"><span class="fa fa-search mr-2"></span>Buscar</button>
+              <button class="btn btn-warning" (click)="initCreateForm()"><span
+                  class="fa fa-plus"></span>Agregar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+
+          <div class="card-header">
+            <div class="row justify-content-between align-items-center">
+              <div class="col-sm-1">
+                <h3 class="card-title">Información</h3>
+              </div>
+            </div>
+
           </div>
+
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead style="background-color: #eee!important">
+                  <tr #tableHeaderHead>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Giro</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Consumidor</th>
+                    <th class="text-center">Fecha Inicio</th>
+                    <!-- <th class="text-center">Fecha Fin</th> -->
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-template [ngIf]="(_dtData.data.length === 0)" [ngIfElse]="tableBody">
+                    <td [attr.colspan]="_dataObjectLength" class="text-center">
+                      <span>Sin Datos</span>
+                    </td>
+                  </ng-template>
+
+                  <ng-template #tableBody>
+                    <tr *ngFor="let item of _dtData.data">
+                      <td>{{item.codigo}}</td>
+                      <td>{{catalogValue('giro',item.id_giro)}}</td>
+                      <td>{{catalogValue('estado',item.id_estado)}}</td>
+                      <td>{{catalogValue('consumidor',item.id_consumidor)}}</td>
+                      <td>{{item.fecha_inicio | date: 'dd/MM/yyyy'}}</td>
+                      <!-- <td>{{item.fecha_fin | date: 'dd/MM/yyyy'}}</td> -->
+                      <td class="text-center">
+                        <button class="btn btn-primary mr-2 btn-sm" (click)="initEditForm(item)"><span
+                            class="fa fa-edit"></span> Editar</button>
+                        <button class="btn btn-danger btn-sm" (click)="initDeleteForm(item)"><span
+                            class="fa fa-times"></span> Eliminar</button>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div class="card-footer clearfix" *ngIf="_dtData.metadata && _dtData.metadata.totalCount > 0">
+            <div class="row">
+              <div class="col-md-auto">
+                <select class="custom-select" [ngModel]="_dtData.metadata.pageSize"
+                  (ngModelChange)="onChangeDataLength($event)">
+                  <option *ngFor="let item of _dataPageLength">{{item}}</option>
+                </select>
+              </div>
+              <div class="col-md-auto">
+                <pagination [boundaryLinks]="true" [itemsPerPage]="_dtData.metadata.pageSize"
+                  [totalItems]="_dtData.metadata.totalCount" [(ngModel)]="_dtData.metadata.currentPage" [maxSize]="5"
+                  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                  (pageChanged)="pageChanged($event)"></pagination>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
-  </section>
-  
-  
-  <!-- Main content -->
-  
-  
-  <ng-template #modalView>
-    <div class="modal-header">
-      <h4 class="modal-title pull-left">Nuevo</h4>
-      <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="_modalRef?.hide()">
-        <span aria-hidden="true" class="visually-hidden">&times;</span>
-      </button>
-    </div>
-    <form [formGroup]="_form" (ngSubmit)="submitForm()">
-      <div class="modal-body">
-  
-        <div class="form-group row">
-          <div class="col-sm-4">
-            <label class="">Giro</label>
-            <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value" [clearable]="true"
-              formControlName="id_giro" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_giro.errors }" />
-            <div *ngIf="_form.controls.id_giro.errors" class="invalid-feedback">Campo vacio</div>
-          </div>
-  
-          <div class="col-sm-4">
-            <label class="">Estado</label>
-            <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
-              [clearable]="true" formControlName="id_estado"
-              [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }" />
-            <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
-          </div>
-  
-          <div class="col-sm-4">
-            <label class="">Consumidor</label>
-            <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
-              [clearable]="true" formControlName="id_consumidor"
-              [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_consumidor.errors }" />
-            <div *ngIf="_form.controls.id_consumidor.errors" class="invalid-feedback">Campo vacio</div>
-          </div>
-  
+  </div>
+</section>
+
+
+<!-- Main content -->
+
+
+<ng-template #modalView>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nuevo</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="_modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="_form" (ngSubmit)="submitForm()">
+    <div class="modal-body">
+
+      <div class="form-group row">
+        <div class="col-sm-4">
+          <label class="">Giro</label>
+          <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value" [clearable]="true"
+            formControlName="id_giro" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_giro.errors }" />
+          <div *ngIf="_form.controls.id_giro.errors" class="invalid-feedback">Campo vacio</div>
         </div>
+
+        <div class="col-sm-4">
+          <label class="">Estado</label>
+          <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_estado"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }" />
+          <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
+        </div>
+
+        <div class="col-sm-4">
+          <label class="">Consumidor</label>
+          <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
+            [clearable]="true" formControlName="id_consumidor"
+            [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_consumidor.errors }" />
+          <div *ngIf="_form.controls.id_consumidor.errors" class="invalid-feedback">Campo vacio</div>
+        </div>
+
       </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Aceptar</button>
-        <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()">Cancelar</button>
-      </div>
-    </form>
-  
-  </ng-template>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Aceptar</button>
+      <button type="button" class="btn btn-danger" (click)="_modalRef?.hide()">Cancelar</button>
+    </div>
+  </form>
+
+</ng-template>

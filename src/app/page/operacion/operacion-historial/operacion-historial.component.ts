@@ -34,6 +34,16 @@ export class OperacionHistorialComponent {
     class: 'modal-lg'
   };
 
+  public flatPickerOpt = {
+    placeholder: 'dd/mm/yyyy',
+    altFormat: 'd/m/Y',
+    dateFormat: 'Y-m-d',
+    altInput: true,
+    enableTime: false,
+    mode: 'single',
+    locale: {}
+  };
+
   public _form: FormGroup | any;
   public _searchForm: FormGroup | any;
   public formSubmitted: boolean = false;
@@ -65,21 +75,21 @@ export class OperacionHistorialComponent {
   }
 
   private async createList() {
-    let response = await this.giroService.getData('').then((resp) => resp);
+    let response = await this.giroService.getData('?page_size=9999&active=true').then((resp) => resp);
     let giroList = response.body.data;
 
     giroList.forEach((element: any) => {
       this.giroSelect.push({ value: element.id, text: element.nombre });
     });
 
-    response = await this.estadoService.get('').then((resp) => resp);
+    response = await this.estadoService.getData('?page_size=9999&active=true').then((resp) => resp);
     let estadoList = response.body.data;
 
     estadoList.forEach((element: any) => {
       this.estadoSelect.push({ value: element.id, text: element.nombre });
     });
 
-    response = await this.consumidorService.get('').then((resp) => resp);
+    response = await this.consumidorService.getData('?page_size=9999&active=true').then((resp) => resp);
     let consumidorList = response.body.data;
 
     consumidorList.forEach((element: any) => {

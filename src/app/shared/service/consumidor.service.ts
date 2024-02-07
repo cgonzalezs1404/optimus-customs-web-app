@@ -7,12 +7,32 @@ import { lastValueFrom, map } from 'rxjs';
   providedIn: 'root'
 })
 export class ConsumidorService {
-  private _env = environment;
 
+  private _env = environment;
   constructor(private http: HttpClient) { }
 
-  public async get(filters: string): Promise<any> {
+  public async getData(filters: string): Promise<any> {
     const url = `${this._env.app.api}${this._env.app.route.consumidor}${filters}`;
     return await lastValueFrom(this.http.get(url, { observe: 'response' }).pipe(map((resp) => { return resp; })));
+  }
+
+  public async getDataById(id: any): Promise<any> {
+    const url = `${this._env.app.api}${this._env.app.route.consumidor}/${id}`;
+    return await lastValueFrom(this.http.get(url, { observe: 'response' }).pipe(map((resp) => { return resp; })));
+  }
+
+  public async postData(payload: any): Promise<any> {
+    const url = `${this._env.app.api}${this._env.app.route.consumidor}`;
+    return await lastValueFrom(this.http.post(url, payload, { observe: 'response' }).pipe(map((resp) => { return resp; })));
+  }
+
+  public async putData(id: any, payload: any): Promise<any> {
+    const url = `${this._env.app.api}${this._env.app.route.consumidor}/${id}`;
+    return await lastValueFrom(this.http.put(url, payload, { observe: 'response' }).pipe(map((resp) => { return resp; })));
+  }
+
+  public async deleteData(id: any): Promise<any> {
+    const url = `${this._env.app.api}${this._env.app.route.consumidor}/${id}`;
+    return await lastValueFrom(this.http.delete(url, { observe: 'response' }).pipe(map((resp) => { return resp; })));
   }
 }

@@ -25,6 +25,9 @@ import { ConfiguracionUsuarioPrivilegioComponent } from './configuracion/configu
 import { ConfiguracionMenuPrivilegioComponent } from "./configuracion/configuracion-menu-privilegio/configuracion-menu-privilegio.component";
 import { ConfiguracionMenuComponent } from './configuracion/configuracion-menu/configuracion-menu.component';
 import { CatalogoComponent } from './catalogo/catalogo.component';
+import { CatalogoConsumidorComponent } from './catalogo/catalogo-consumidor/catalogo-consumidor.component';
+import { CatalogoEstadoComponent } from './catalogo/catalogo-estado/catalogo-estado.component';
+import { CatalogoGiroComponent } from './catalogo/catalogo-giro/catalogo-giro.component';
 
 @NgModule({
 
@@ -45,6 +48,9 @@ import { CatalogoComponent } from './catalogo/catalogo.component';
         ConfiguracionMenuPrivilegioComponent,
         ConfiguracionMenuComponent,
         CatalogoComponent,
+        CatalogoConsumidorComponent,
+        CatalogoEstadoComponent,
+        CatalogoGiroComponent,
         
     ],
     imports: [

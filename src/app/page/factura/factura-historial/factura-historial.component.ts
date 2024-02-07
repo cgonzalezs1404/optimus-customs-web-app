@@ -76,7 +76,7 @@ export class FacturaHistorialComponent {
 
   private async createList() {
 
-    let response = await this.estadoService.get('?page_size=9999&activo=true').then((resp) => resp);
+    let response = await this.estadoService.getData('?page_size=9999&activo=true').then((resp) => resp);
     let estadoList = response.body.data;
 
     estadoList.forEach((element: any) => {

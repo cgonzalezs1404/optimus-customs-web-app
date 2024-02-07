@@ -63,10 +63,10 @@ export class ConfiguracionUsuarioComponent implements OnInit {
 
     this._form = this.builder.group({
       id: [null],
-      nombres: [null],
-      apellido_paterno: [null],
-      apellido_materno: [null],
-      correo_electronico: [null],
+      nombres: [null, Validators.required],
+      apellido_paterno: [null, Validators.required],
+      apellido_materno: [null, Validators.required],
+      correo_electronico: [null, Validators.required],
       creado_por: [null],
       fecha_creacion: [null],
       actualizado_por: [null],

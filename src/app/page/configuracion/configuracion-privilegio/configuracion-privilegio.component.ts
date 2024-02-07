@@ -4,8 +4,9 @@ import { MetaData, metaDataLength, newMetaData } from '../../../shared/interface
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../../../shared/service/session.service';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import Swal from 'sweetalert2';
 import { PrivilegioService } from '../../../shared/service/privilegio.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-configuracion-privilegio',
@@ -60,8 +61,8 @@ export class ConfiguracionPrivilegioComponent implements OnInit{
 
     this._form = this.builder.group({
       id: [null],
-      nombre: [null],
-      descripcion: [null],
+      nombre: [null, Validators.required],
+      descripcion: [null, Validators.required],
       creado_por: [null],
       fecha_creacion: [null],
       actualizado_por: [null],
