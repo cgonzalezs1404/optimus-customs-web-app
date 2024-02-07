@@ -64,7 +64,7 @@ export class FacturaPendienteComponent implements OnInit {
     private operacionService: service.OperacionService,
     private session: service.SessionService,
     public fileService: service.FileService,
-    ) {
+  ) {
     moment.locale("es");
   }
   async ngOnInit(): Promise<void> {
@@ -257,7 +257,7 @@ export class FacturaPendienteComponent implements OnInit {
     await await this.searchData();
   }
 
-  public catalogValue(name: string, value: any) {
+  public catalogValue(name: string, value: any): string {
     if (name == 'operacion')
       return this.operacionSelect.find(t => t.value === value).text;
     if (name == 'estado')

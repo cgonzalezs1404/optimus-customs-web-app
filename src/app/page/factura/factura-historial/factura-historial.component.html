@@ -151,7 +151,15 @@
                                         <tr *ngFor="let item of _dtData.data">
                                             <td>{{catalogValue('operacion',item.id_operacion)}}</td>
                                             <td>{{item.codigo}}</td>
-                                            <td>{{catalogValue('estado',item.id_estado)}}</td>
+                                            <td>
+                                                <h5><span
+                                                        [ngClass]="{'Normal' : 'badge badge-success', 
+                                                                    'Por Vencer': 'badge badge-warning', 
+                                                                    'Vencido': 'badge badge-danger'}[catalogValue('estado',item.id_estado)]">
+                                                        {{catalogValue('estado',item.id_estado)}}
+                                                    </span>
+                                                </h5>
+                                            </td>
                                             <td>{{item.tipo}}</td>
                                             <td>{{item.razon_social}}</td>
                                             <td>{{item.fecha_emision | date: 'dd/MM/yyyy'}}</td>

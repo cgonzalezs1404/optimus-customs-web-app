@@ -196,7 +196,7 @@ export class FacturaHistorialComponent {
     await await this.searchData();
   }
 
-  public catalogValue(name: string, value: any) {
+  public catalogValue(name: string, value: any): string {
     if (name == 'operacion')
       return this.operacionSelect.find(t => t.value === value).text;
     if (name == 'estado')

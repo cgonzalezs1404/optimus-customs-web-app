@@ -85,7 +85,8 @@
 
             <div class="card-footer clearfix">
               <button type="submit" class="btn btn-primary mr-2"><span class="fa fa-search mr-2"></span>Buscar</button>
-              <button class="btn btn-warning" (click)="initCreateForm()"><span class="fa fa-plus mr-2"></span>Agregar</button>
+              <button class="btn btn-warning" (click)="initCreateForm()"><span
+                  class="fa fa-plus mr-2"></span>Agregar</button>
 
             </div>
           </form>
@@ -138,7 +139,14 @@
                     <tr *ngFor="let item of _dtData.data">
                       <td>{{catalogValue('operacion',item.id_operacion)}}</td>
                       <td>{{item.codigo}}</td>
-                      <td>{{catalogValue('estado',item.id_estado)}}</td>
+                      <td>
+                        <h5><span [ngClass]="{'Normal' : 'badge badge-success', 
+                                            'Por Vencer': 'badge badge-warning', 
+                                            'Vencido': 'badge badge-danger'}[catalogValue('estado',item.id_estado)]">
+                            {{catalogValue('estado',item.id_estado)}}
+                          </span>
+                        </h5>
+                      </td>
                       <td>{{item.tipo}}</td>
                       <td>{{item.razon_social}}</td>
                       <td>{{item.fecha_emision | date: 'dd/MM/yyyy'}}</td>
@@ -235,18 +243,18 @@
 
       <div class="form-group row">
         <div class="col-sm-4">
-            <label class="">Serie</label>
-            <input type="text" class="form-control" formControlName="serie" />
+          <label class="">Serie</label>
+          <input type="text" class="form-control" formControlName="serie" />
         </div>
         <div class="col-sm-4">
-            <label class="">Folio</label>
-            <input type="text" class="form-control" formControlName="folio" />
+          <label class="">Folio</label>
+          <input type="text" class="form-control" formControlName="folio" />
         </div>
         <div class="col-sm-4">
-            <label class="">Precio</label>
-            <input type="text" class="form-control" formControlName="precio" />
+          <label class="">Precio</label>
+          <input type="text" class="form-control" formControlName="precio" />
         </div>
-    </div>
+      </div>
 
       <div class="form-group row">
         <div class="col-sm-12">
@@ -259,35 +267,35 @@
       <div class="col-sm-12">
         <label>Archivos Adjuntos</label>
         <ul *ngIf="_form.value.archivo_xml == null && _form.value.archivo_pdf == null" class="list-group">
-            <li class="list-group-item text-center">
-                <h3>Sin Datos</h3>
-            </li>
+          <li class="list-group-item text-center">
+            <h3>Sin Datos</h3>
+          </li>
         </ul>
         <div class="list-group">
-            <div *ngIf="_form.value.archivo_xml != null" class="list-group-item flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-center">
-                    <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
-                        (click)="fileService.openFile(_form.value.archivo_xml.url)">
-                        <a>
-                            <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_xml.nombre)"
-                                width="30px" height="30px" alt="file-list"
-                                onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_xml.nombre}}</a>
-                    </div>
-                </div>
+          <div *ngIf="_form.value.archivo_xml != null" class="list-group-item flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-center">
+              <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
+                (click)="fileService.openFile(_form.value.archivo_xml.url)">
+                <a>
+                  <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_xml.nombre)" width="30px"
+                    height="30px" alt="file-list"
+                    onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_xml.nombre}}</a>
+              </div>
             </div>
-            <div *ngIf="_form.value.archivo_pdf != null" class="list-group-item flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-center">
-                    <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
-                        (click)="fileService.openFile(_form.value.archivo_pdf.url)">
-                        <a>
-                            <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_pdf.nombre)"
-                                width="30px" height="30px" alt="file-list"
-                                onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_pdf.nombre}}</a>
-                    </div>
-                </div>
+          </div>
+          <div *ngIf="_form.value.archivo_pdf != null" class="list-group-item flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-center">
+              <div class="d-flex justify-content-center" style="cursor: pointer; width: 95%;"
+                (click)="fileService.openFile(_form.value.archivo_pdf.url)">
+                <a>
+                  <img class="mr-2" [src]="fileService.getIconFile(_form.value.archivo_pdf.nombre)" width="30px"
+                    height="30px" alt="file-list"
+                    onerror="this.src='./assets/image/no-photo.svg'">{{_form.value.archivo_pdf.nombre}}</a>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
 
     </div>
 
