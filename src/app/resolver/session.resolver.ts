@@ -16,9 +16,7 @@ export class SessionResolver implements Resolve<any> {
         private storageServ: service.SessionService,
         private authServ: service.UsuarioTokenService,
         public router: Router,
-    ) {
-        //this._appUser = storageServ.getStorageData();
-    }
+    ) {}
 
     public async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<any> {
 

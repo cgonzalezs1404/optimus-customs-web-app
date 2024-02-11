@@ -22,6 +22,9 @@ import { CommonModule } from '@angular/common';
         service.FacturaArchivoService,
         service.UsuarioService,
         service.PrivilegioService,
+        service.UsuarioPrivilegioService,
+        service.MenuPrivilegioService,
+        service.MenuService,
 
         service.FileService
     ],

@@ -28,10 +28,10 @@
         <app-configuracion-menu></app-configuracion-menu>
       </tab>
       <tab heading="Privilegios de Usuario" id="tab4">
-        <app-configuracion-usuario-privilegio></app-configuracion-usuario-privilegio>
+        <app-configuracion-usuario-privilegio [_privilegioSelect]="_privilegioSelect" [_usuarioSelect]="_usuarioSelect"></app-configuracion-usuario-privilegio>
       </tab>
       <tab heading="Privilegios de Menú" id="tab5">
-        <app-configuracion-menu-privilegio></app-configuracion-menu-privilegio>
+        <app-configuracion-menu-privilegio [_menuSelect]="_menuSelect" [_privilegioSelect]="_privilegioSelect"></app-configuracion-menu-privilegio>
       </tab>
       
     </tabset>

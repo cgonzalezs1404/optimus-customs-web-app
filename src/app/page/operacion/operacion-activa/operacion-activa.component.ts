@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SessionService } from '../../../shared/service/session.service';
 import Swal from 'sweetalert2';
 import * as service from '../../../shared/service/service.index';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { MetaData, metaDataLength, newMetaData } from '../../../shared/interface/metadata';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 
@@ -13,7 +12,7 @@ import { PageChangedEvent } from 'ngx-bootstrap/pagination';
   templateUrl: './operacion-activa.component.html',
   styleUrl: './operacion-activa.component.css'
 })
-export class OperacionActivaComponent implements OnInit {
+export class OperacionActivaComponent implements OnInit, OnChanges {
 
   @ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
   @ViewChild('tableHeaderHead') _tableHeaderHead: ElementRef<HTMLInputElement> | any;
@@ -22,9 +21,9 @@ export class OperacionActivaComponent implements OnInit {
   public _dataPageLength: number[] = metaDataLength;
   public _dataObjectLength = 0;
 
-  public giroSelect: any[] = [];
-  public estadoSelect: any[] = [];
-  public consumidorSelect: any[] = [];
+  @Input() giroSelect: any[] = [];
+  @Input() estadoSelect: any[] = [];
+  @Input() consumidorSelect: any[] = [];
 
   public modalConfig: any = {
     backdrop: true,
@@ -53,52 +52,30 @@ export class OperacionActivaComponent implements OnInit {
 
   constructor(
     private modalService: BsModalService,
-    private loadingService: NgxSpinnerService,
-    private giroService: service.GiroService,
-    private estadoService: service.EstadoService,
-    private consumidorService: service.ConsumidorService,
     private operacionService: service.OperacionService,
     private sessionService: SessionService,
     private builder: FormBuilder,
   ) {
 
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['estadoSelect'] || changes['giroSelect'] || changes['consumidorSelect']) {
+      if (this.estadoSelect.length === 0 || this.giroSelect.length === 0 || this.consumidorSelect.length === 0) {
+        return;
+      }
+    }
+  }
 
   public async ngOnInit(): Promise<void> {
     this.initForms();
     this.session = await this.sessionService.getStorageData();
-    await this.createList();
   }
 
   public async ngAfterViewInit(): Promise<void> {
     setTimeout(() => { this._dataObjectLength = this._tableHeaderHead.nativeElement.childElementCount; });
   }
 
-  private async createList() {
-    let response = await this.giroService.getData('?page_size=9999&active=true').then((resp) => resp);
-    let giroList = response.body.data;
 
-    giroList.forEach((element: any) => {
-      this.giroSelect.push({ value: element.id, text: element.nombre });
-    });
-
-    response = await this.estadoService.getData('?page_size=9999&active=true').then((resp) => resp);
-    let estadoList = response.body.data;
-
-    estadoList.forEach((element: any) => {
-      this.estadoSelect.push({ value: element.id, text: element.nombre });
-    });
-
-    response = await this.consumidorService.getData('?page_size=9999&active=true').then((resp) => resp);
-    let consumidorList = response.body.data;
-
-    consumidorList.forEach((element: any) => {
-      this.consumidorSelect.push({ value: element.id, text: element.razon_social });
-    });
-    this.giroSelect = [...this.giroSelect];
-    this.estadoSelect = [...this.estadoSelect];
-    this.consumidorSelect = [...this.consumidorSelect];
-  }
 
   private initForms() {
     this._searchForm = this.builder.group({

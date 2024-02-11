@@ -34,7 +34,6 @@ export class HomeComponent implements OnInit {
     var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-    console.log(firstDay + ' - ' + lastDay);
     this.facturasMes = facturasResult.body.data.filter((x: any) => new Date(x.fecha_emision) >= new Date(firstDay) && new Date(x.fecha_emision) <= new Date(lastDay) && x.activo === true);
     this._totalFacturasMes = this.facturasMes.length;
     this._totalFacturasPendientesMes = this.facturasMes.filter((x: any) => x.pagado === false && x.aprobado === false && x.activo === true).length;

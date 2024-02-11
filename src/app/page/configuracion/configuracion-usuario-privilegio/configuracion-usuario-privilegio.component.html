@@ -14,12 +14,12 @@
                             <div class="row form-group">
                                 <div class="col-sm-3">
                                     <label>Usuario</label>
-                                    <ng-select placeholder="Select..." [items]="usuarioSelect" bindLabel="text"
+                                    <ng-select placeholder="Select..." [items]="_usuarioSelect" bindLabel="text"
                                         bindValue="value" [clearable]="true" formControlName="id_usuario" />
                                 </div>
                                 <div class="col-sm-3">
                                     <label>Privilegio</label>
-                                    <ng-select placeholder="Select..." [items]="privilegioSelect" bindLabel="text"
+                                    <ng-select placeholder="Select..." [items]="_privilegioSelect" bindLabel="text"
                                         bindValue="value" [clearable]="true" formControlName="id_privilegio" />
                                 </div>
                                 <div class="col-sm-3 text-center">
@@ -140,7 +140,7 @@
             <div class="form-group row">
                 <div class="col-sm-12">
                     <label class="">Usuario</label>
-                    <ng-select placeholder="Select..." [items]="usuarioSelect" bindLabel="text" bindValue="value"
+                    <ng-select placeholder="Select..." [items]="_usuarioSelect" bindLabel="text" bindValue="value"
                         [clearable]="true" formControlName="id_usuario"
                         [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_usuario.errors }" />
                     <div *ngIf="_form.controls.id_usuario.errors" class="invalid-feedback">Campo vacio</div>
@@ -149,7 +149,7 @@
             <div class="form-group row">
                 <div class="col-sm-12">
                     <label class="">Privilegio</label>
-                    <ng-select placeholder="Select..." [items]="privilegioSelect" bindLabel="text" bindValue="value"
+                    <ng-select placeholder="Select..." [items]="_privilegioSelect" bindLabel="text" bindValue="value"
                         [clearable]="true" formControlName="id_privilegio"
                         [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_privilegio.errors }" />
                     <div *ngIf="_form.controls.id_privilegio.errors" class="invalid-feedback">Campo vacio</div>

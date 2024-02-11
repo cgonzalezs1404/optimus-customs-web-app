@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MetaData, metaDataLength, newMetaData } from '../../../shared/interface/metadata';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import { MenuPrivilegioService, MenuService, PrivilegioService, SessionService } from '../../../shared/service/service.index';
+import { MenuPrivilegioService, SessionService } from '../../../shared/service/service.index';
 import Swal from 'sweetalert2';
 
 
@@ -12,7 +12,11 @@ import Swal from 'sweetalert2';
   templateUrl: './configuracion-menu-privilegio.component.html',
   styleUrl: './configuracion-menu-privilegio.component.css'
 })
-export class ConfiguracionMenuPrivilegioComponent {
+export class ConfiguracionMenuPrivilegioComponent implements OnInit, OnChanges {
+
+  @Input() _menuSelect: any[] = [];
+  @Input() _privilegioSelect: any[] = [];
+
   @ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
   @ViewChild('tableHeaderHead') _tableHeaderHead: ElementRef<HTMLInputElement> | any;
   public _modalRef?: BsModalRef;
@@ -26,9 +30,6 @@ export class ConfiguracionMenuPrivilegioComponent {
   public isUpdate: boolean = false;
   public session: any;
 
-  public menuSelect: any[] = [];
-  public privilegioSelect: any[] = [];
-
   public modalConfig: any = {
     backdrop: true,
     keyboard: true,
@@ -41,39 +42,22 @@ export class ConfiguracionMenuPrivilegioComponent {
     private modalService: BsModalService,
     private builder: FormBuilder,
     private sessionService: SessionService,
-    private menuPrivilegioService: MenuPrivilegioService,
-    private menuService: MenuService,
-    private privilegioService: PrivilegioService
-  ) {
+    private menuPrivilegioService: MenuPrivilegioService,) {
+
+  }
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    if (changes['_menuSelect'] || changes['_privilegioSelect']) {
+      if (this._menuSelect.length === 0 || this._privilegioSelect.length === 0) { return; }
+    }
 
   }
   async ngOnInit(): Promise<void> {
     this.initForms();
     this.session = await this.sessionService.getStorageData();
-    await this.createList();
   }
 
   public async ngAfterViewInit(): Promise<void> {
     setTimeout(() => { this._dataObjectLength = this._tableHeaderHead.nativeElement.childElementCount; });
-  }
-
-  private async createList() {
-    let response = await this.menuService.getData('?page_size=9999&activo=true').then((resp) => resp);
-    let usuarioList = response.body.data;
-
-    usuarioList.forEach((element: any) => {
-      this.menuSelect.push({ value: element.id, text: element.nombre });
-    });
-
-    response = await this.privilegioService.getData('?page_size=9999&activo=true').then((resp) => resp);
-    let privilegioList = response.body.data;
-
-    privilegioList.forEach((element: any) => {
-      this.privilegioSelect.push({ value: element.id, text: element.nombre });
-    });
-
-    this.menuSelect = [...this.menuSelect];
-    this.privilegioSelect = [...this.privilegioSelect];
   }
 
   private initForms() {
@@ -193,9 +177,9 @@ export class ConfiguracionMenuPrivilegioComponent {
 
   public catalogValue(name: string, value: any) {
     if (name == 'menu')
-      return this.menuSelect.find(t => t.value === value).text;
+      return this._menuSelect.find(t => t.value === value).text;
     if (name == 'privilegio')
-      return this.privilegioSelect.find(t => t.value === value).text;
+      return this._privilegioSelect.find(t => t.value === value).text;
     return '...';
   }
 }

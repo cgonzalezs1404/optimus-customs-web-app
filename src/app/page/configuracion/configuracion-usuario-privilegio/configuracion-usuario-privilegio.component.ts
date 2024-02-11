@@ -1,17 +1,17 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MetaData, metaDataLength, newMetaData } from '../../../shared/interface/metadata';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import Swal from 'sweetalert2';
-import { PrivilegioService, SessionService, UsuarioPrivilegioService, UsuarioService } from '../../../shared/service/service.index';
+import { SessionService, UsuarioPrivilegioService } from '../../../shared/service/service.index';
 
 @Component({
   selector: 'app-configuracion-usuario-privilegio',
   templateUrl: './configuracion-usuario-privilegio.component.html',
   styleUrl: './configuracion-usuario-privilegio.component.css'
 })
-export class ConfiguracionUsuarioPrivilegioComponent implements OnInit {
+export class ConfiguracionUsuarioPrivilegioComponent implements OnInit, OnChanges {
 
   @ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
   @ViewChild('tableHeaderHead') _tableHeaderHead: ElementRef<HTMLInputElement> | any;
@@ -26,8 +26,8 @@ export class ConfiguracionUsuarioPrivilegioComponent implements OnInit {
   public isUpdate: boolean = false;
   public session: any;
 
-  public usuarioSelect: any[] = [];
-  public privilegioSelect: any[] = [];
+  @Input() _usuarioSelect: any[] = [];
+  @Input() _privilegioSelect: any[] = [];
 
   public modalConfig: any = {
     backdrop: true,
@@ -41,40 +41,24 @@ export class ConfiguracionUsuarioPrivilegioComponent implements OnInit {
     private modalService: BsModalService,
     private builder: FormBuilder,
     private sessionService: SessionService,
-    private usuarioPrivilegioService: UsuarioPrivilegioService,
-    private usuarioService: UsuarioService,
-    private privilegioService: PrivilegioService
-    ) {
+    private usuarioPrivilegioService: UsuarioPrivilegioService,) {
 
+  }
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    if (changes['_usuarioSelect'] || changes['_searchForm']) {
+      if (this._usuarioSelect.length === 0 || this._privilegioSelect.length === 0) { return; }
+    }
   }
   async ngOnInit(): Promise<void> {
     this.initForms();
     this.session = await this.sessionService.getStorageData();
-    await this.createList();
   }
 
   public async ngAfterViewInit(): Promise<void> {
     setTimeout(() => { this._dataObjectLength = this._tableHeaderHead.nativeElement.childElementCount; });
   }
 
-  private async createList() {
-    let response = await this.usuarioService.getData('?page_size=9999&activo=true').then((resp) => resp);
-    let usuarioList = response.body.data;
 
-    usuarioList.forEach((element: any) => {
-      this.usuarioSelect.push({ value: element.id, text: `${element.nombres} ${element.apellido_paterno} ${element.apellido_materno}` });
-    });
-
-    response = await this.privilegioService.getData('?page_size=9999&activo=true').then((resp) => resp);
-    let privilegioList = response.body.data;
-
-    privilegioList.forEach((element: any) => {
-      this.privilegioSelect.push({ value: element.id, text: element.nombre });
-    });
-
-    this.usuarioSelect = [...this.usuarioSelect];
-    this.privilegioSelect = [...this.privilegioSelect];
-  }
 
   private initForms() {
     this._searchForm = this.builder.group({
@@ -193,9 +177,9 @@ export class ConfiguracionUsuarioPrivilegioComponent implements OnInit {
 
   public catalogValue(name: string, value: any) {
     if (name == 'usuario')
-      return this.usuarioSelect.find(t => t.value === value).text;
+      return this._usuarioSelect.find(t => t.value === value).text;
     if (name == 'privilegio')
-      return this.privilegioSelect.find(t => t.value === value).text;
+      return this._privilegioSelect.find(t => t.value === value).text;
     return '...';
   }
 }

@@ -20,8 +20,10 @@ export class RenewTokenInterceptor implements HttpInterceptor {
 
     const strContains = req.url.startsWith(this._env.app.api);
     const includeAuthUrl = req.url.includes(this._env.app.route.usuario_token_login);
-    if (strContains && !includeAuthUrl) {
+    if (strContains && !includeAuthUrl && !this._isRefreshing) {
+      this._isRefreshing = true;
       return from(this.getUser()).pipe(switchMap(user => {
+        
         const tokenExpiration = new Date(user.expiration_date);
         if (this.daysToExpiration(tokenExpiration) <= 1) {
           this.renewToken(req);
@@ -38,9 +40,7 @@ export class RenewTokenInterceptor implements HttpInterceptor {
   }
 
   private async renewToken(req: HttpRequest<any>): Promise<void> {
-    if(!this._isRefreshing){
-      console.log('refresh_token is fucked!!!');
-      this._isRefreshing = true;
+      console.log(req);
       var session = await this.sessionService.getStorageData();
       const url = `${this._env.app.api}${this._env.app.route.usuario_token_refresh}`;
   
@@ -48,9 +48,7 @@ export class RenewTokenInterceptor implements HttpInterceptor {
       if (newToken) {
         await this.sessionService.setStorageData(newToken);
         this._isRefreshing = false;
-        console.log('refresh_token is rdy to be fucked up again!!!');
       }
-    }
   }
 
   private daysToExpiration(expirationDate: Date): number {

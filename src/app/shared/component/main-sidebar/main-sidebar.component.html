@@ -35,9 +35,9 @@
               <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
               <li *ngFor="let menu of usuarioMenus" class="nav-item">
-                <a [routerLink]="catalogValue(menu.id_menu).url" class="nav-link">
+                <a [routerLink]="menu.url" class="nav-link">
                   <i class="fas fa-circle nav-icon"></i>
-                  <p>{{catalogValue(menu.id_menu).nombre}}</p>
+                  <p>{{menu.nombre}}</p>
                 </a>
               </li>
               <!-- <li class="nav-item">

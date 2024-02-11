@@ -1,19 +1,17 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MetaData, metaDataLength, newMetaData } from '../../../shared/interface/metadata';
 import * as service from '../../../shared/service/service.index';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
-import Swal from 'sweetalert2';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-factura-historial',
   templateUrl: './factura-historial.component.html',
   styleUrl: './factura-historial.component.css'
 })
-export class FacturaHistorialComponent {
+export class FacturaHistorialComponent implements OnInit, OnChanges {
   @ViewChild('modalView', { read: TemplateRef }) _modalView: TemplateRef<any> | any;
   @ViewChild('tableHeaderHead') _tableHeaderHead: ElementRef<HTMLInputElement> | any;
   public _modalRef?: BsModalRef;
@@ -25,8 +23,8 @@ export class FacturaHistorialComponent {
   public _dataPageLength: number[] = metaDataLength;
   public _dataObjectLength = 0;
 
-  public operacionSelect: any[] = [];
-  public estadoSelect: any[] = [];
+  @Input() operacionSelect: any[] = [];
+  @Input() estadoSelect: any[] = [];
   public aprobadoSelect: any[] = [{ value: true, text: 'SI' }, { value: false, text: 'NO' }]
 
   public isUpdate: boolean = false;
@@ -58,40 +56,24 @@ export class FacturaHistorialComponent {
     private router: Router,
     private facturaService: service.FacturaService,
     private facturaArchivoService: service.FacturaArchivoService,
-    private estadoService: service.EstadoService,
-    private operacionService: service.OperacionService,
     private session: service.SessionService,
     public fileService: service.FileService) {
-    moment.locale("es");
   }
   async ngOnInit(): Promise<void> {
     this.initForms();
     this._session = await this.session.getStorageData();
-    await this.createList();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['estadoSelect'] || changes['operacionSelect']){
+      if(this.estadoSelect.length === 0 || this.operacionSelect.length === 0){
+        return;
+      }
+    }
   }
 
   public async ngAfterViewInit(): Promise<void> {
     setTimeout(() => { this._dataObjectLength = this._tableHeaderHead.nativeElement.childElementCount; });
-  }
-
-  private async createList() {
-
-    let response = await this.estadoService.getData('?page_size=9999&activo=true').then((resp) => resp);
-    let estadoList = response.body.data;
-
-    estadoList.forEach((element: any) => {
-      this.estadoSelect.push({ value: element.id, text: element.nombre });
-    });
-
-    response = await this.operacionService.getData('?page_size=9999&activo=true').then((resp) => resp);
-    let operacionList = response.body.data;
-
-    operacionList.forEach((element: any) => {
-      this.operacionSelect.push({ value: element.id, text: element.codigo });
-    });
-
-    this.estadoSelect = [...this.estadoSelect];
-    this.operacionSelect = [...this.operacionSelect];
   }
 
   private initForms() {

@@ -19,10 +19,10 @@
 <div>
   <tabset>
     <tab heading="Operaciones Activas" id="tab1">
-      <app-operacion-activa></app-operacion-activa>
+      <app-operacion-activa [estadoSelect]="estadoSelect" [giroSelect]="giroSelect" [consumidorSelect]="consumidorSelect"></app-operacion-activa>
     </tab>
     <tab heading="Operaciones Históricas" id="tab2">
-      <app-operacion-historial></app-operacion-historial>
+      <app-operacion-historial [estadoSelect]="estadoSelect" [giroSelect]="giroSelect" [consumidorSelect]="consumidorSelect"></app-operacion-historial>
     </tab>
   </tabset>
 </div>
