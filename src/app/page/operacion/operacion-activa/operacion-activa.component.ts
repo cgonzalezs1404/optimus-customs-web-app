@@ -83,11 +83,12 @@ export class OperacionActivaComponent implements OnInit, OnChanges {
       id_estado: [null],
       id_consumidor: [null],
       codigo: [null],
+      nombre: [null],
       fecha_inicio: [null],
       fecha_fin: [null],
       finalizado: [false],
       activo: [true],
-      descendente: [true]
+      page_descending: [true]
     });
 
     this._form = this.builder.group({
@@ -96,6 +97,7 @@ export class OperacionActivaComponent implements OnInit, OnChanges {
       id_estado: [null, Validators.required],
       id_consumidor: [null, Validators.required],
       codigo: [null],
+      nombre: [null],
       fecha_inicio: [null],
       fecha_fin: [null],
       finalizado: [false],
@@ -127,8 +129,10 @@ export class OperacionActivaComponent implements OnInit, OnChanges {
     this._form.patchValue({
       id: 0,
       codigo: null,
+      nombre: null,
       fecha_inicio: new Date(),
       fecha_fin: null,
+      finalizado: false,
       creado_por: this.session.username,
       fecha_creacion: new Date(),
       actualizado_por: this.session.username,

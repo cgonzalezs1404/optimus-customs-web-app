@@ -8,7 +8,7 @@ export const environment = {
         root: 'http://localhost:4200/home',
         name: 'Optimus Customs',
         host: 'http://localhost:4200',
-        api: 'http://localhost/OptimusCustoms.Api',
+        api: 'http://localhost/Api',
         route: {
             complemento_pago: '/api/complemento_pago',
             comprobante_pago: '/api/comprobante_pago',

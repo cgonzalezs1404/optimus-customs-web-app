@@ -44,6 +44,12 @@
               <div class="row">
                 <div class="col-sm-3">
                   <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" formControlName="nombre" placeholder="Ingrese">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
                     <label>Fecha Inicio</label>
                     <input class="form-control" type="text" mwlFlatpickr formControlName="fecha_inicio"
                       [placeholder]="flatPickerOpt.placeholder" [dateFormat]="flatPickerOpt.dateFormat"
@@ -65,7 +71,7 @@
                   <label class="control-label" style="color: transparent;">-</label>
                   <div class="form-check">
                     <div class="icheck-primary">
-                      <input type="checkbox" id="checkboxPrimary1" formControlName="descendente">
+                      <input type="checkbox" id="checkboxPrimary1" formControlName="page_descending">
                       <label for="checkboxPrimary1">Descendiente</label>
                     </div>
                   </div>
@@ -185,29 +191,34 @@
     <div class="modal-body">
 
       <div class="form-group row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <label class="">Giro</label>
           <ng-select placeholder="Select..." [items]="giroSelect" bindLabel="text" bindValue="value" [clearable]="true"
             formControlName="id_giro" [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_giro.errors }" />
           <div *ngIf="_form.controls.id_giro.errors" class="invalid-feedback">Campo vacio</div>
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <label class="">Estado</label>
           <ng-select placeholder="Select..." [items]="estadoSelect" bindLabel="text" bindValue="value"
             [clearable]="true" formControlName="id_estado"
             [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_estado.errors }" />
           <div *ngIf="_form.controls.id_estado.errors" class="invalid-feedback">Campo vacio</div>
         </div>
-
-        <div class="col-sm-4">
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-6">
           <label class="">Consumidor</label>
           <ng-select placeholder="Select..." [items]="consumidorSelect" bindLabel="text" bindValue="value"
             [clearable]="true" formControlName="id_consumidor"
             [ngClass]="{ 'is-invalid': formSubmitted && _form.controls.id_consumidor.errors }" />
           <div *ngIf="_form.controls.id_consumidor.errors" class="invalid-feedback">Campo vacio</div>
         </div>
-
+        <div class="col-sm-6">
+          <label class="">Nombre</label>
+          <input class="form-control" type="text" placeholder="Ingresa" formControlName="nombre" />
+          <div *ngIf="_form.controls.nombre.errors" class="invalid-feedback">Campo vacio</div>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
